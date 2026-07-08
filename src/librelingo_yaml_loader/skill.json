@@ -113,6 +113,30 @@
                 "required": ["Phrase", "Translation"]
             }
         },
+		"Exercises": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Exercise": {
+                        "type": "string"
+                    },
+                    "Type": {
+                        "type": "string"
+                    },
+                    "Instruction": {
+                        "type": "string"
+                    },
+                    "Phrase": {
+                        "type": "string"
+                    },
+                    "Translation": {
+                        "type": "string"
+                    }
+                },
+                "required": ["Exercise", "Type", "Phrase", "Translation"]
+            }
+        },
         "Mini-dictionary": {
             "type": "object",
             "properties": {

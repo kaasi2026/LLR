@@ -175,6 +175,27 @@ def create_chips_challenge_generator(reverse):
 
     return get_chips_challenge
 
+def get_transform_phrase_challenge(exercise, course):
+    instruction = exercise.get("Instruction") or exercise.get("instruction", "")
+    challenge_text = exercise.get("Phrase") or exercise.get("phrase", "")
+    answer_text = exercise.get("Translation") or exercise.get("translation", "")
+
+    if not challenge_text or not answer_text:
+        return []
+
+    from .challenge_types import get_dumb_opaque_id, remove_control_characters_for_display
+
+    return [
+        {
+            "type": "transformPhrase",
+            "instruction": instruction,
+            "challengeText": remove_control_characters_for_display(challenge_text),
+            "answer": remove_control_characters_for_display(answer_text),
+            "id": get_dumb_opaque_id("Phrase", challenge_text, "transformPhrase"),
+            "priority": 1,
+            "group": get_dumb_opaque_id("Group", challenge_text),
+        }
+    ]
 
 get_chips_challenge = create_chips_challenge_generator(False)
 get_reverse_chips_challenge = create_chips_challenge_generator(True)

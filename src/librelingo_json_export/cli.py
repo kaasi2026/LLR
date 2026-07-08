@@ -23,6 +23,8 @@ def main(input_path: str, output_path: str, dry_run):
     """
     settings = Settings(
         dry_run=dry_run,
+        generate_audio=False,
+        audio_output_dir="/tmp",
     )
     course = load_course(input_path)
     ensure_output_directory(output_path, settings)

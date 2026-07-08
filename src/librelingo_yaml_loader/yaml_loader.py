@@ -401,6 +401,7 @@ def _load_skill(path: Path, course: Course) -> Skill:
 
         words = data["New words"]
         phrases = data["Phrases"]
+        exercises = data.get("Exercises", [])
     except TypeError as type_error:
         raise RuntimeError(
             f'Skill file "{path}" is empty or does not exist'
@@ -443,6 +444,7 @@ def _load_skill(path: Path, course: Course) -> Skill:
         dictionary=_convert_mini_dictionary(data, course)
         + _convert_two_way_dictionary(data),
         introduction=introduction,
+        exercises=exercises,
     )
 
 

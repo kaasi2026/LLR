@@ -13,6 +13,7 @@
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	//import db from '../db/db';
 	import isBrowser from 'utils/isBrowser';
+	import TransformPhraseChallenge from './TransformPhraseChallenge.svelte';
 
 	export let rawChallenges;
 	export let languageName;
@@ -51,13 +52,22 @@
 		id: string;
 		type: 'chips';
 	};
+	
+	type TransformPhraseChallengeType = {
+		id: string;
+		type: 'transformPhrase';
+		instruction: string;
+		challengeText: string;
+		answer: string;
+	};
 
 	type ChallengeType =
 		| CardChallengeType
 		| ListeningChallengeType
 		| OptionsChallengeType
 		| ShortInputChallengeType
-		| ChipsChallengeType;
+		| ChipsChallengeType
+		| TransformPhraseChallengeType;
 
 	let challenges: Array<ChallengeType> = sortChallengeGroups(
 		shuffle(rawChallenges),
@@ -206,6 +216,16 @@
 								{challenge}
 								{skipChallenge}
 								{skipAllChallenges}
+							/>
+						{/if}
+						{#if challenge.type === 'transformPhrase'}
+							<TransformPhraseChallenge
+								{challenge}
+								{registerResult}
+								{resolveChallenge}
+								{skipChallenge}
+								{skipAllChallenges}
+								{specialCharacters}
 							/>
 						{/if}
 					</div>

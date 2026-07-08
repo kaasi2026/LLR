@@ -7,6 +7,7 @@ from .challenge_types import (
     get_options_challenge,
     get_reverse_chips_challenge,
     get_short_input_challenge,
+    get_transform_phrase_challenge,  # Importation de la fonction renommée
 )
 
 
@@ -65,10 +66,16 @@ def _get_challenges_data(skill, course: Course):
     """
     Generates challenges for a certain Skill
     """
-    return sum(
+    challenges = sum(
         [
             _make_challenges_using(_get_phrase_challenges, skill.phrases, course),
             _make_challenges_using(_get_word_challenges, skill.words, course),
         ],
         start=[],
     )
+
+    if hasattr(skill, 'exercises') and skill.exercises:
+        for exercise in skill.exercises:
+            challenges.extend(get_transform_phrase_challenge(exercise, course))
+
+    return challenges

@@ -219,6 +219,7 @@ class Skill(
             "image_set",
             "dictionary",
             "introduction",
+            "exercises",
         ],
     )
 ):
