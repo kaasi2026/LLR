@@ -1,6 +1,9 @@
 {
 	"name": "@librelingo/monorepo",
 	"private": true,
+	"engines": {
+		"node": ">=22.0.0"
+	},
 	"scripts": {
 		"web-serve": "npm run -w @librelingo/web dev",
 		"export:production": "npm run installAllExternalCourses && npm run exportAllCourses && npm run -w apps/web export && npm run docs:build && pdm run python apps/tools/librelingo_tools/generate.py --courses ./config/courses.json --outdir ./export/course-tools-legacy",

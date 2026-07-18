@@ -1,15 +1,44 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const webRoot = path.resolve(__dirname, '..');
-const repoRoot = path.resolve(webRoot, '..', '..');
+
+function resolveRepoRoot(webRootPath, explicitRoot = null) {
+    const candidates = [];
+
+    if (explicitRoot) {
+        candidates.push(path.resolve(explicitRoot));
+    }
+
+    candidates.push(path.resolve(webRootPath, '..', '..'));
+    candidates.push(path.resolve(webRootPath, '..'));
+    candidates.push(path.resolve(webRootPath));
+    candidates.push(path.resolve(webRootPath, '..', '..', '..'));
+
+    for (const candidate of [...new Set(candidates)]) {
+        if (existsSync(path.join(candidate, 'courses')) && existsSync(path.join(candidate, 'src', 'pyproject.toml'))) {
+            return candidate;
+        }
+    }
+
+    return path.resolve(webRootPath, '..', '..');
+}
+
+const repoRoot = resolveRepoRoot(webRoot, process.env.LIBRELINGO_ROOT || process.env.REPO_ROOT);
 const rootCoursesDir = path.resolve(repoRoot, 'courses');
 const webCoursesDir = path.resolve(webRoot, 'src', 'courses');
 
-const pythonCommandCandidates = ['python3.10', 'python3.9', 'python3.8', 'python3', 'python'];
+const pythonCommandCandidates = [
+    process.env.PYTHON_BIN,
+'python3.10',
+'python3.9',
+'python3.8',
+'python3',
+'python'
+].filter(Boolean);
 
 function parsePythonVersion(output) {
     const match = /Python\s*(\d+)\.(\d+)\.(\d+)/.exec(output);
@@ -18,10 +47,10 @@ function parsePythonVersion(output) {
 }
 
 function isSupportedPythonVersion(version) {
-    // Support >= 3.8 and < 3.11
+    // The project packages require Python 3.8 through 3.10.
     if (!version) return false;
     if (version.major !== 3) return false;
-    return version.minor >= 8 && version.minor < 11;
+    return version.minor >= 8 && version.minor <= 10;
 }
 
 function findPython() {
@@ -60,15 +89,34 @@ function runCommand(command, args, options = {}) {
     }
 }
 
+function ensurePipInVirtualenv(venvPython) {
+    const ensurePipResult = spawnSync(venvPython, ['-m', 'pip', '--version'], {
+        stdio: 'inherit',
+        cwd: repoRoot,
+        env: {
+            ...process.env,
+            PYTHONPATH: path.join(repoRoot, 'src')
+        }
+    });
+
+    if (ensurePipResult.status === 0) {
+        return;
+    }
+
+    console.log('pip is not available in the virtual environment yet; bootstrapping it now...');
+    runCommand(venvPython, ['-m', 'ensurepip', '--upgrade']);
+    runCommand(venvPython, ['-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '--upgrade', 'pip']);
+}
+
 function listCourseDirectories(directory) {
     if (!existsSync(directory)) {
         return [];
     }
 
     return readdirSync(directory, { withFileTypes: true })
-        .filter((dirent) => dirent.isDirectory())
-        .map((dirent) => dirent.name)
-        .filter((courseName) => existsSync(path.join(directory, courseName, 'course.yaml')));
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name)
+    .filter((courseName) => existsSync(path.join(directory, courseName, 'course.yaml')));
 }
 
 function shouldExportCourse(courseName) {
@@ -97,9 +145,19 @@ function main() {
         process.exit(1);
     }
 
+    if (process.env.PYTHON_BIN) {
+        console.log(`Using configured Python interpreter: ${process.env.PYTHON_BIN}`);
+    }
+
     const pythonPath = path.join(repoRoot, 'src');
+    const venvDir = path.join(repoRoot, 'tmp', 'prepareCourses-venv');
+    const venvPython = path.join(venvDir, 'bin', 'python');
+
+    console.log('Creating temporary Python virtual environment at:', venvDir);
+    runCommand(pythonCommand, ['-m', 'venv', '--clear', venvDir]);
+    ensurePipInVirtualenv(venvPython);
     console.log('Installing local web course exporter package and dependencies from:', pythonPath);
-    runCommand(pythonCommand, ['-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', path.join(repoRoot, 'src')], {
+    runCommand(venvPython, ['-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '--upgrade', path.join(repoRoot, 'src')], {
         env: {
             PYTHONPATH: pythonPath
         }
@@ -117,7 +175,7 @@ function main() {
         const targetCourseDir = path.join(webCoursesDir, courseName);
 
         console.log(`Exporting course "${courseName}" from YAML to web JSON content...`);
-        runCommand(pythonCommand, ['-m', 'librelingo_json_export.cli', sourceCourseDir, targetCourseDir], {
+        runCommand(venvPython, ['-m', 'librelingo_json_export.cli', sourceCourseDir, targetCourseDir], {
             env: {
                 PYTHONPATH: pythonPath
             }
@@ -137,9 +195,13 @@ function main() {
     }
 }
 
-try {
-    main();
-} catch (error) {
-    console.error('Failed to prepare course content:', error instanceof Error ? error.message : error);
-    process.exit(1);
+if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
+    try {
+        main();
+    } catch (error) {
+        console.error('Failed to prepare course content:', error instanceof Error ? error.message : error);
+        process.exit(1);
+    }
 }
+
+export { resolveRepoRoot };

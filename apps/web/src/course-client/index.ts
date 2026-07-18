@@ -26,7 +26,7 @@ export type CourseDataType = {
 
 const formatCourseData = (rawCourseData, { courseName }) => {
 	const { modules, languageName, repositoryURL, languageCode, specialCharacters, uiLanguage } =
-		rawCourseData;
+	rawCourseData;
 
 	return {
 		courseName,
@@ -90,11 +90,40 @@ const getCoursePath = async (courseName: string, relativePath: string) => {
 const importMaybeDefault = async (path: string) => {
 	const module = await import(path);
 	const result = (module as any).default ?? module;
-	console.log('importMaybeDefault result for', path);
-	console.log('module keys:', Object.keys(module));
-	console.log('module:', module);
-	console.log('result:', result);
 	return result;
+};
+
+export const loadMarkdownIntroduction = async ({
+	courseName,
+	introductionPath,
+	readFile,
+	importModule
+}: {
+	courseName: string;
+	introductionPath: string;
+	readFile?: (courseName: string, relativePath: string) => Promise<string>;
+	importModule?: (courseName: string, relativePath: string) => Promise<any>;
+}) => {
+	const loader = readFile ?? getCoursePath;
+	const importer = importModule ?? ((name: string, path: string) => importMaybeDefault(`../courses/${name}/${path}`));
+
+	if (typeof window === 'undefined') {
+		try {
+			return await loader(courseName, introductionPath);
+		} catch (err) {
+			try {
+				return await importer(courseName, introductionPath);
+			} catch (importError) {
+				return '';
+			}
+		}
+	}
+
+	try {
+		return await importer(courseName, introductionPath);
+	} catch (err) {
+		return '';
+	}
 };
 
 export const get_course = async ({
@@ -179,12 +208,15 @@ export const get_skill_data = async ({
 };
 
 const formatSkillIntroduction = async (skill, { skillName, courseName, markdown }) => {
+	const safeMarkdown = typeof markdown === 'string' ? markdown : '';
+	const parsedMarkdown = safeMarkdown.trim() ? parseMarkdown(safeMarkdown) : '';
+
 	return {
 		skillName,
 		courseName,
 		title: skill.title,
 		practiceHref: skill.practiceHref,
-		readmeHTML: parseMarkdown(markdown)
+		readmeHTML: parsedMarkdown
 	};
 };
 
@@ -201,23 +233,23 @@ export const get_skill_introduction = async ({
 		for (const skill of module.skills) {
 			if (skill.practiceHref === skillName) {
 				const introductionPath = normalizeCoursePath(courseName, `introduction/${skill.introduction}`);
+				const markdown = await loadMarkdownIntroduction({
+					courseName,
+					introductionPath
+				});
 
-				if (typeof window === 'undefined') {
-					try {
-						const markdown = await getCoursePath(courseName, introductionPath);
-						return formatSkillIntroduction(skill, { skillName, courseName, markdown });
-					} catch (err) {
-						const markdownFromModule = await importMaybeDefault(`../courses/${courseName}/${introductionPath}`);
-						return formatSkillIntroduction(skill, { skillName, courseName, markdown: markdownFromModule });
-					}
+				if (!markdown || !String(markdown).trim()) {
+					return {
+						...skill,
+						skillName,
+						courseName,
+						readmeHTML: '',
+						practiceHref: skill.practiceHref,
+						title: skill.title
+					};
 				}
 
-				const markdownFromModule = await importMaybeDefault(`../courses/${courseName}/${introductionPath}`);
-				return formatSkillIntroduction(skill, {
-					skillName,
-					courseName,
-					markdown: markdownFromModule
-				});
+				return formatSkillIntroduction(skill, { skillName, courseName, markdown });
 			}
 		}
 	}

@@ -8,7 +8,7 @@ services:
       - PYTHONPATH=/app/src
     volumes:
       - ./courses:/data/courses
-      - ./apps/web:/app/apps/web:cached
+      - ./apps/web:/apps/web:cached
       - ./apps/web/src/courses:/data/web-courses
     stdin_open: true
     tty: true
@@ -16,12 +16,16 @@ services:
 
   web:
     build:
-      context: ./apps/web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/web/Dockerfile
     image: librelingo-web:latest
     working_dir: /app/apps/web
+    environment:
+      - LIBRELINGO_ROOT=/app
+      - PYTHONPATH=/app/src
+      - PYTHON_BIN=python3.10
     volumes:
       - ./:/app
     ports:
       - "5173:5173"
-    command: ["sh", "-c", "npm run prepareCourses && npm install --prefer-offline --no-audit --no-fund --no-workspaces && npm run dev -- --host 0.0.0.0"]
+    command: ["sh", "-c", "cd /app/apps/web && npm run prepareCourses && npm install --prefer-offline --no-audit --no-fund --no-workspaces && npm run dev -- --host 0.0.0.0"]

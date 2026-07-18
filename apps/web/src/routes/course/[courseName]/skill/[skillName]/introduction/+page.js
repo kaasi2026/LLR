@@ -15,9 +15,20 @@ export async function load(page) {
 		};
 	}
 
-	return {
-		...(await get_skill_introduction({ courseName, skillName })),
-		loading: false,
-		preview: null
-	};
+	try {
+		return {
+			...(await get_skill_introduction({ courseName, skillName })),
+			loading: false,
+			preview: null
+		};
+	} catch (error) {
+		return {
+			loading: false,
+			preview: null,
+			readmeHTML: '',
+			practiceHref: skillName,
+			courseName,
+			title: skillName
+		};
+	}
 }

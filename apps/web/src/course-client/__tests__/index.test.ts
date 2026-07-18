@@ -1,4 +1,4 @@
-import { get_course, get_skill_data, get_skill_introduction } from "../index"
+import { get_course, get_skill_data, get_skill_introduction, loadMarkdownIntroduction } from "../index"
 
 describe("get_course", () => {
   it("returns correct course data", async () => {
@@ -34,6 +34,21 @@ describe("get_skill_introduction", () => {
         "title": "Animals",
       }
     `)
+  })
+
+  it("falls back gracefully when introduction markdown cannot be loaded", async () => {
+    await expect(
+      loadMarkdownIntroduction({
+        courseName: "test-1",
+        introductionPath: "introduction/missing.md",
+        readFile: async () => {
+          throw new Error("missing file")
+        },
+        importModule: async () => {
+          throw new Error("missing module")
+        },
+      })
+    ).resolves.toBe("")
   })
 
 })

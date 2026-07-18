@@ -20,6 +20,7 @@
 .venv/
 .env
 /apps/*/poetry.lock
+/tmp/
 
 
 # Development

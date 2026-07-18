@@ -116,6 +116,55 @@ Modules:
 
 **`Modules`** has a list of module directory names followed by a `/`.
 
+<a id="audio-settings"></a>
+
+#### Audio settings in the course template
+
+If you want to use audio for listening challenges, you can add an optional `Settings > Audio` section to your `course.yaml`. This is especially useful when you want generated pronunciation or listening samples for words and phrases.
+
+A minimal template looks like this:
+
+```yaml
+Settings:
+  Audio:
+    Enabled: True
+    TTS:
+      - Provider: gtts
+        Voice: default
+        Engine: standard
+```
+
+Available choices:
+
+- `Enabled`: Choose `True` to turn audio on, or `False` to disable it. If the section is omitted, audio is effectively off by default.
+- `TTS`: A list of text-to-speech configurations. You can define one or more entries.
+  - `Provider`: Choose the backend you want to use.
+    - `gtts`: simple and commonly used option
+    - `piper`: local/offline option
+    - `polly`: AWS Polly-based option
+  - `Voice`: Provider-specific voice name.
+  - `Engine`: Usually `standard`, but some providers may support different values.
+
+A disabled example looks like this:
+
+```yaml
+Settings:
+  Audio:
+    Enabled: False
+```
+
+After adding or changing the audio settings, you can generate the audio files from the repository root with:
+
+```sh
+PYTHONPATH=src python3 src/librelingo_audios/cli.py courses/<course-name> apps/web/static/voice <course-name>
+```
+
+Or use the helper script:
+
+```sh
+./scripts/updateAudioForYamlCourse.sh <name of edited course>
+```
+
 <a id="spell-checker"></a>
 
 #### Automated spell checker

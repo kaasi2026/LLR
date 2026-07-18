@@ -46,6 +46,7 @@
     display: flex;
     gap: var(--spacing-medium);
     align-items: center;
+    flex-wrap: wrap;
   }
 
   .navbar__left,
@@ -53,5 +54,22 @@
     display: flex;
     align-items: center;
     height: 100%;
+  }
+
+  .navbar__right :global(a) {
+    color: var(--deprecated-navbar-text-color);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .navbar__right :global(a:hover),
+  .navbar__right :global(a:focus-visible) {
+    background: var(--deprecated-navbar-highlight-color);
+    color: var(--deprecated-navbar-text-color);
+    outline: none;
   }
 </style>

@@ -3,6 +3,9 @@
 	"description": "A web app for learning with LibreLingo courses",
 	"version": "1.33.0",
 	"type": "module",
+	"engines": {
+		"node": ">=22.0.0"
+	},
 	"scripts": {
 		"prepareCourses": "node ./scripts/prepareCourses.js",
 		"predev": "npm run prepareCourses",
@@ -18,7 +21,7 @@
 		"types": "tsc && svelte-check --treshold error",
 		"installCourse": "./scripts/installExternalCourse.sh",
 		"installAllExternalCourses": "python ./scripts/installExternalCourses.py",
-    "installSelectedCourses": "python ./scripts/installCustomCourses.py",
+		"installSelectedCourses": "python ./scripts/installCustomCourses.py",
 		"fetchAudios": "bash ./scripts/fetchAudios.sh"
 	},
 	"publishConfig": {
@@ -59,8 +62,6 @@
 		"@librelingo/answer-corrector": "file:../answer-corrector",
 		"@sveltejs/adapter-auto": "^6.0.1",
 		"bulma": "^0.9.4",
-		"bulma-pageloader": "^0.3.0",
-		"bulma-tooltip": "^3.0.2",
 		"bulmaswatch": "^0.8.1",
 		"hotkeys-js": "^3.13.9",
 		"howler": "^2.2.4",
