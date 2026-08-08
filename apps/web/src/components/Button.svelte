@@ -20,7 +20,7 @@
 </script>
 
 <LinkOrButton
-	ref="lluis-button"
+	class="lluis-button"
 	data-size={size}
 	data-style={style}
 	data-selector={fakePseudoSelector}
@@ -47,7 +47,7 @@
 {/if}
 
 <style>
-	:global([ref='lluis-button']) {
+:global(.lluis-button) {
 		font-size: var(--font-size-normal);
 		line-height: calc(var(--font-size-normal) * 1.5);
 		gap: 0.5rem;
@@ -61,44 +61,30 @@
 		white-space: nowrap;
 		cursor: pointer;
 		transition: all 0.15s;
-	}
-
-	/* Sizes */
-	:global([ref='lluis-button'][data-style='accent'][data-size='medium']) {
-		font-size: var(--font-size-large);
-		line-height: calc(var(--font-size-large) * 1.5);
-	}
-
-	:global([ref='lluis-button'][data-style='accent'][data-size='large']) {
-		font-size: var(--font-size-xlarge);
-		line-height: calc(var(--font-size-xlarge) * 1.5);
-	}
-
-	:global([ref='lluis-button'][data-style='accent']) {
+		text-decoration: none;
 		background-color: var(--button-color-accent);
 		border-color: var(--button-border-color-accent);
 		color: var(--text-color-default);
 	}
 
 	/* Primary style */
-	:global([ref='lluis-button'][data-style='primary']) {
+	:global(.lluis-button[data-style='primary']) {
 		background-color: var(--button-color-primary);
 		border-color: var(--button-border-color-primary);
 		color: var(--text-color-inverted);
 	}
 
-	:global([ref='lluis-button'][data-selector='hover']) :global([ref='lluis-button']:hover) {
-		background-color: red;
-		color: var(--text-color-default);
+	:global(.lluis-button[data-selector='hover']):hover {
+		/* placeholder hover state; actual hover colors should be defined by button style variables */
 	}
 
-	:global([ref='lluis-button'][data-style='secondary']) {
+	:global(.lluis-button[data-style='secondary']) {
 		background-color: var(--button-color-secondary);
 		border-color: var(--button-border-color-secondary);
 		color: var(--text-color-default);
 	}
 
-	:global([ref='lluis-button'][data-style='linkButton']) {
+	:global(.lluis-button[data-style='linkButton']) {
 		background-color: var(--button-color-secondary);
 		border-color: var(--button-border-color-link);
 		color: var(--button-color-primary);

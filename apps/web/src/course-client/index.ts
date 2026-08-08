@@ -1,5 +1,49 @@
 import parseMarkdown from '../utils/parseMarkdown';
 
+const findFileRecursive = async (dir: string, fileName: string): Promise<string | null> => {
+	const { readdir } = await import('fs/promises');
+	const { join } = await import('path');
+	const entries = await readdir(dir, { withFileTypes: true });
+	for (const entry of entries) {
+		const candidate = join(dir, entry.name);
+		if (entry.isDirectory()) {
+			const found = await findFileRecursive(candidate, fileName);
+			if (found) {
+				return found;
+			}
+		} else if (entry.isFile() && entry.name === fileName) {
+			return candidate;
+		}
+	}
+	return null;
+};
+
+const loadMarkdownIntroductionFromSourceCourse = async (
+	courseName: string,
+	fileName: string
+): Promise<string> => {
+	const { join } = await import('path');
+	const candidateBases = [
+		join(process.cwd(), 'courses', courseName),
+		join(process.cwd(), '..', 'courses', courseName),
+		join(process.cwd(), '..', '..', 'courses', courseName)
+	];
+
+	for (const base of candidateBases) {
+		try {
+			const found = await findFileRecursive(base, fileName);
+			if (found) {
+				const { readFile } = await import('fs/promises');
+				return await readFile(found, 'utf-8');
+			}
+		} catch (err) {
+			// ignore missing base paths
+		}
+	}
+
+	return '';
+};
+
 export type SkillDataType = {
 	id: string;
 	practiceHref: string;
@@ -67,7 +111,8 @@ const getCoursePath = async (courseName: string, relativePath: string) => {
 	const candidateBases = [
 		join(__dirname, '../courses', courseName),
 		join(process.cwd(), 'src', 'courses', courseName),
-		join(process.cwd(), 'apps', 'web', 'src', 'courses', courseName)
+		join(process.cwd(), 'apps', 'web', 'src', 'courses', courseName),
+		join(process.cwd(), '..', '..', 'courses', courseName)
 	];
 
 	let lastError;
@@ -106,6 +151,7 @@ export const loadMarkdownIntroduction = async ({
 }) => {
 	const loader = readFile ?? getCoursePath;
 	const importer = importModule ?? ((name: string, path: string) => importMaybeDefault(`../courses/${name}/${path}`));
+	let markdown = '';
 
 	if (typeof window === 'undefined') {
 		try {
@@ -114,7 +160,9 @@ export const loadMarkdownIntroduction = async ({
 			try {
 				return await importer(courseName, introductionPath);
 			} catch (importError) {
-				return '';
+				const { basename } = await import('path');
+				const fileName = basename(introductionPath);
+				return await loadMarkdownIntroductionFromSourceCourse(courseName, fileName);
 			}
 		}
 	}
@@ -122,6 +170,14 @@ export const loadMarkdownIntroduction = async ({
 	try {
 		return await importer(courseName, introductionPath);
 	} catch (err) {
+		const { basename } = await import('path');
+		const fileName = basename(introductionPath);
+		if (typeof window !== 'undefined') {
+			const fetchResponse = await fetch(`/api/source-course/${courseName}/${fileName}`);
+			if (fetchResponse.ok) {
+				return await fetchResponse.text();
+			}
+		}
 		return '';
 	}
 };
@@ -227,31 +283,59 @@ export const get_skill_introduction = async ({
 	courseName: string;
 	skillName: string;
 }) => {
-	const { modules } = await get_course({ courseName });
+	let modules;
+	try {
+		const course = await get_course({ courseName });
+		modules = course.modules;
+	} catch (err) {
+		modules = null;
+	}
 
-	for (const module of modules) {
-		for (const skill of module.skills) {
-			if (skill.practiceHref === skillName) {
-				const introductionPath = normalizeCoursePath(courseName, `introduction/${skill.introduction}`);
-				const markdown = await loadMarkdownIntroduction({
-					courseName,
-					introductionPath
-				});
-
-				if (!markdown || !String(markdown).trim()) {
-					return {
-						...skill,
-						skillName,
+	if (modules) {
+		for (const module of modules) {
+			for (const skill of module.skills) {
+				if (skill.practiceHref === skillName) {
+					const introductionPath = normalizeCoursePath(
 						courseName,
-						readmeHTML: '',
-						practiceHref: skill.practiceHref,
-						title: skill.title
-					};
-				}
+						skill.introduction ? `introduction/${skill.introduction}` : `introduction/${skillName}.md`
+					);
 
-				return formatSkillIntroduction(skill, { skillName, courseName, markdown });
+					let markdown = await loadMarkdownIntroduction({
+						courseName,
+						introductionPath
+					});
+
+					if ((!markdown || !String(markdown).trim()) && skill.introduction) {
+						markdown = await loadMarkdownIntroduction({
+							courseName,
+							introductionPath: `introduction/${skillName}.md`
+						});
+					}
+
+					if (!markdown || !String(markdown).trim()) {
+						continue;
+					}
+
+					return formatSkillIntroduction(skill, { skillName, courseName, markdown });
+				}
 			}
 		}
+	}
+
+	const fallbackIntroductionPath = `introduction/${skillName}.md`;
+	const fallbackMarkdown = await loadMarkdownIntroduction({
+		courseName,
+		introductionPath: fallbackIntroductionPath
+	});
+
+	if (fallbackMarkdown && String(fallbackMarkdown).trim()) {
+		return formatSkillIntroduction(
+			{
+				title: skillName,
+				practiceHref: skillName
+			},
+			{ skillName, courseName, markdown: fallbackMarkdown }
+		);
 	}
 
 	throw new Error(`Could not find skill with name "${skillName}" in course "${courseName}".`);

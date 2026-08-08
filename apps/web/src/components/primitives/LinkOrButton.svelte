@@ -52,7 +52,9 @@
 
     overflow: hidden;
     white-space: nowrap;
-    text-decoration: none;
-    color: inherit;
+  }
+
+  a[role='button'] {
+    text-decoration: none !important;
   }
 </style>
