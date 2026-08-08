@@ -52,5 +52,7 @@
 
     overflow: hidden;
     white-space: nowrap;
+    text-decoration: none;
+    color: inherit;
   }
 </style>

@@ -99,13 +99,12 @@ function ensurePipInVirtualenv(venvPython) {
         }
     });
 
-    if (ensurePipResult.status === 0) {
-        return;
+    if (ensurePipResult.status !== 0) {
+        console.log('pip is not available in the virtual environment yet; bootstrapping it now...');
+        runCommand(venvPython, ['-m', 'ensurepip', '--upgrade']);
     }
 
-    console.log('pip is not available in the virtual environment yet; bootstrapping it now...');
-    runCommand(venvPython, ['-m', 'ensurepip', '--upgrade']);
-    runCommand(venvPython, ['-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '--upgrade', 'pip']);
+    runCommand(venvPython, ['-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '--upgrade', 'pip', 'setuptools', 'wheel']);
 }
 
 function listCourseDirectories(directory) {
