@@ -84,6 +84,13 @@
 		color: var(--text-color-default);
 	}
 
+	:global(.lluis-button[data-style='primary']),
+	:global(.lluis-button[data-style='secondary']),
+	:global(.lluis-button[data-style='accent']),
+	:global(.lluis-button[data-style='key']) {
+		text-decoration: none !important;
+	}
+
 	:global(.lluis-button[data-style='linkButton']) {
 		background-color: var(--button-color-secondary);
 		border-color: var(--button-border-color-link);

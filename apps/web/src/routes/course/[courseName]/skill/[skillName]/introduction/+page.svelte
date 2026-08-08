@@ -42,11 +42,20 @@
     description={$_('about.meta.description')}
   >
     <div class="intro-actions">
-      <Button style="secondary" href={homepageLink}>Go back to course</Button>
-      <Button style="primary" href={`/course/${courseName}/skill/${practiceHref}`}>
+      <Button style="primary" size="large" href={homepageLink}>Go back to course</Button>
+      <Button style="primary" size="large" href={`/course/${courseName}/skill/${practiceHref}`}>
         Practice {title}
       </Button>
     </div>
   </MarkDownPage>
 {/if}
+
+<style>
+	:global(.intro-actions .lluis-button),
+	:global(.intro-actions .lluis-button:hover),
+	:global(.intro-actions .lluis-button:focus),
+	:global(.intro-actions .lluis-button:visited) {
+		color: #fff !important;
+	}
+</style>
 
