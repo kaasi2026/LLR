@@ -1,5 +1,8 @@
 {
-	"extends": "../../tsconfig.json",
+	"extends": [
+		"../../tsconfig.json",
+		"./.svelte-kit/tsconfig.json"
+	],
 	"include": [
 		"src/**/*"
 	],
@@ -10,15 +13,7 @@
 	"compilerOptions": {
 		"outDir": "dist",
 		"rootDir": "src",
-		"allowJs": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": false,
-		"moduleResolution": "bundler"
+		"rewriteRelativeImportExtensions": true
 	}
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
