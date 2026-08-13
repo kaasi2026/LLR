@@ -6,7 +6,7 @@
 	import InputFieldWithVirtualKeyboard from './InputFieldWithVirtualKeyboard/InputFieldWithVirtualKeyboard.svelte';
 	import Column from 'components/Column.svelte';
 	import Columns from 'components/Columns.svelte';
-	import evaluateAnswer from '@librelingo/answer-corrector/src/index';
+	import evaluateAnswer from 'answer-corrector/src/index';
 
 	// TODO: remove this
 	function shuffle<T>(array: T[]): T[] {
