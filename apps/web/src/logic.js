@@ -8,6 +8,29 @@
 		return result;
 	}
 
+// TODO: remove this
+function uniqBy<T>(
+  array: T[],
+  iteratee: keyof T | ((item: T) => unknown)
+): T[] {
+  const getKey = typeof iteratee === 'function'
+    ? iteratee
+    : (item: T) => item?.[iteratee as keyof T];
+
+   const seen = new Set<unknown>();
+  const result: T[] = [];
+
+   for (const item of array) {
+    const key = getKey(item);
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(item);
+    }
+  }
+
+   return result;
+}
+
 export const prepareChallenge = ({
   currentChallenge,
   alternativeChallenges,
