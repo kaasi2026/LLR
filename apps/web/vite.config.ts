@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-auto';
+import { plugin as mdPlugin, Mode } from 'vite-plugin-markdown';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
@@ -23,6 +24,7 @@ export default defineConfig({
                 sounds: './static/sounds',
                 'course-client': 'src/course-client'
             }
-        })
+        }),
+        mdPlugin({ mode: [Mode.MARKDOWN, Mode.HTML] })
     ]
 });

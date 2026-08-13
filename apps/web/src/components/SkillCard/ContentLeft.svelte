@@ -15,7 +15,6 @@
 {/if}
 
 <style type="text/scss">
-
 	.stale,
 	.completed {
 		mix-blend-mode: screen;

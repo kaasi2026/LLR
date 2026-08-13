@@ -13,7 +13,6 @@
 {/if}
 
 <style type="text/scss">
-
 	.image-set {
 		position: relative;
 		overflow: hidden;

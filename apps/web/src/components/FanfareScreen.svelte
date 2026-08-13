@@ -58,7 +58,6 @@
 </section>
 
 <style type="text/scss">
-
 	@include from($tablet) {
 		.bottom {
 			position: absolute;
