@@ -33,21 +33,20 @@
 	}
 </script>
 
-
 {#if !loading}
-  <MarkDownPage
-    className="intro-page"
-    {readmeHTML}
-    {title}
-    description={$_('about.meta.description')}
-  >
-    <div class="intro-actions">
-      <Button style="primary" size="large" href={homepageLink}>Go back to course</Button>
-      <Button style="primary" size="large" href={`/course/${courseName}/skill/${practiceHref}`}>
-        Practice {title}
-      </Button>
-    </div>
-  </MarkDownPage>
+	<MarkDownPage
+		className="intro-page"
+		{readmeHTML}
+		{title}
+		description={$_('about.meta.description')}
+	>
+		<div class="intro-actions">
+			<Button style="primary" size="large" href={homepageLink}>Go back to course</Button>
+			<Button style="primary" size="large" href={`/course/${courseName}/skill/${practiceHref}`}>
+				Practice {title}
+			</Button>
+		</div>
+	</MarkDownPage>
 {/if}
 
 <style>
@@ -58,4 +57,3 @@
 		color: #fff !important;
 	}
 </style>
-
