@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "npm run dev -w @librelingo/web",
+		"dev": "npm run dev -w web",
 		"format": "eslint . --fix --max-warnings=0 && prettier --write apps/**/*.svelte docs --ignore-path ./.prettierignore_for_svelte",
 		"lint": "eslint . --max-warnings=0 && prettier --check apps/**/*.svelte docs --ignore-path ./.prettierignore_for_svelte",
 		"exportAllCourses": "./scripts/exportAllYamlCourses.sh",
@@ -16,9 +16,6 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/kit": "^2.63.0",
-		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@types/node": "^24",
 		"eslint": "^10.4.1",
 		"eslint-config-prettier": "^10.1.8",
@@ -26,14 +23,8 @@
 		"globals": "^17.6.0",
 		"prettier": "^3.8.3",
 		"prettier-plugin-svelte": "^4.1.0",
-		"svelte": "^5.56.1",
-		"svelte-check": "^4.6.0",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.60.1",
 		"vite": "^8.0.16"
-	},
-	"optionalDependencies": {
-		"@rollup/rollup-darwin-arm64": "^4.34.1",
-		"@rollup/rollup-linux-x64-gnu": "^4.34.1"
 	}
 }

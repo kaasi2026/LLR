@@ -1,11 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import hotkeys from 'hotkeys-js';
-	import shuffle from 'lodash.shuffle';
 	import OptionCard from './OptionCard.svelte';
 	export let options;
 	export let selectedOption;
 	export let disabled;
+
+	// TODO: remove this
+	function shuffle<T>(array: T[]): T[] {
+		const result = [...array];
+		for (let i = result.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[result[i], result[j]] = [result[j], result[i]];
+		}
+		return result;
+	}
 
 	// determines which keys correspond to which card
 	// skips a number for the fake item (i. e. invisible on desktop)
