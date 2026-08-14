@@ -1,3 +1,5 @@
+// TODO: move to lib and rewrite
+
 // TODO: remove this
 function shuffle<T>(array: T[]): T[] {
 	const result = [...array];

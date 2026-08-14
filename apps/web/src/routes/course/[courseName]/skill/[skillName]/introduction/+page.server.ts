@@ -51,7 +51,7 @@ export async function load(page) {
 				preview: null
 			};
 		}
-	} catch (error) {
+	} catch {
 		// fall back to source markdown
 	}
 
@@ -68,7 +68,7 @@ export async function load(page) {
 				preview: null
 			};
 		}
-	} catch (err) {
+	} catch {
 		// ignore and fall through
 	}
 
