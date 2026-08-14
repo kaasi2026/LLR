@@ -1,5 +1,14 @@
-import shuffle from 'lodash.shuffle';
-import uniq from 'lodash.uniq';
+// TODO: move to lib and rewrite
+
+// TODO: remove this
+function shuffle<T>(array: T[]): T[] {
+	const result = [...array];
+	for (let i = result.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[result[i], result[j]] = [result[j], result[i]];
+	}
+	return result;
+}
 
 export const removeAlternatives = (challenges) =>
 	Object.values(Object.fromEntries(challenges.map((challenge) => [challenge.id, challenge])));
@@ -9,7 +18,7 @@ export const sortChallengeGroups = (challenges, expectedNumberOfChallenges) => {
 	// as much as possible while also priorities are respected within groups
 	// this is useful because some challenges should precede others
 
-	const allGroups = uniq(challenges.map(({ group }) => group));
+	const allGroups = [...new Set(challenges.map(({ group }) => group))];
 	const challengesPerGroup = Math.round(challenges.length / allGroups.length);
 	const expectedNumberOfGroups = Math.max(
 		1,

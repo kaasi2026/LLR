@@ -14,53 +14,54 @@ const coursesDir = path.resolve(webRoot, 'src', 'courses');
 const staticVoicesDir = path.resolve(webRoot, 'static', 'voice');
 
 function copyAudioFiles() {
-    // Create static voices directory
-    mkdirSync(staticVoicesDir, { recursive: true });
+	// Create static voices directory
+	mkdirSync(staticVoicesDir, { recursive: true });
 
-    let copiedCount = 0;
+	let copiedCount = 0;
 
-    // Find all course directories
-    const courses = readdirSync(coursesDir, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
+	// Find all course directories
+	const courses = readdirSync(coursesDir, { withFileTypes: true })
+		.filter((dirent) => dirent.isDirectory())
+		.map((dirent) => dirent.name);
 
-    for (const courseName of courses) {
-        const voicesDir = path.resolve(coursesDir, courseName, 'voices');
+	for (const courseName of courses) {
+		const voicesDir = path.resolve(coursesDir, courseName, 'voices');
 
-        if (!existsSync(voicesDir)) {
-            continue;
-        }
+		if (!existsSync(voicesDir)) {
+			continue;
+		}
 
-        try {
-            const audioFiles = readdirSync(voicesDir)
-                .filter(file => file.endsWith('.mp3') || file.endsWith('.wav') || file.endsWith('.ogg'));
+		try {
+			const audioFiles = readdirSync(voicesDir).filter(
+				(file) => file.endsWith('.mp3') || file.endsWith('.wav') || file.endsWith('.ogg')
+			);
 
-            for (const audioFile of audioFiles) {
-                const srcPath = path.resolve(voicesDir, audioFile);
-                const destPath = path.resolve(staticVoicesDir, audioFile);
+			for (const audioFile of audioFiles) {
+				const srcPath = path.resolve(voicesDir, audioFile);
+				const destPath = path.resolve(staticVoicesDir, audioFile);
 
-                try {
-                    copyFileSync(srcPath, destPath);
-                    copiedCount++;
-                } catch (err) {
-                    console.warn(`Failed to copy ${audioFile}:`, err.message);
-                }
-            }
+				try {
+					copyFileSync(srcPath, destPath);
+					copiedCount++;
+				} catch (err) {
+					console.warn(`Failed to copy ${audioFile}:`, err.message);
+				}
+			}
 
-            if (audioFiles.length > 0) {
-                console.log(`Copied ${audioFiles.length} audio files from course "${courseName}"`);
-            }
-        } catch (err) {
-            console.warn(`Error processing course "${courseName}":`, err.message);
-        }
-    }
+			if (audioFiles.length > 0) {
+				console.log(`Copied ${audioFiles.length} audio files from course "${courseName}"`);
+			}
+		} catch (err) {
+			console.warn(`Error processing course "${courseName}":`, err.message);
+		}
+	}
 
-    console.log(`Total audio files copied: ${copiedCount}`);
+	console.log(`Total audio files copied: ${copiedCount}`);
 }
 
 try {
-    copyAudioFiles();
+	copyAudioFiles();
 } catch (error) {
-    console.error('Failed to copy audio files:', error.message);
-    process.exit(1);
+	console.error('Failed to copy audio files:', error.message);
+	process.exit(1);
 }

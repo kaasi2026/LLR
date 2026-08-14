@@ -1,3 +1,5 @@
+// TODO: clean this up
+
 import { get_skill_introduction } from 'course-client';
 import parseMarkdown from '../../../../../../utils/parseMarkdown';
 import { fileURLToPath } from 'url';
@@ -51,7 +53,7 @@ export async function load(page) {
 				preview: null
 			};
 		}
-	} catch (error) {
+	} catch {
 		// fall back to source markdown
 	}
 
@@ -68,7 +70,7 @@ export async function load(page) {
 				preview: null
 			};
 		}
-	} catch (err) {
+	} catch {
 		// ignore and fall through
 	}
 

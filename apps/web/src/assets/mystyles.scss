@@ -1,39 +1,39 @@
 @charset "utf-8";
-@import "bulmaswatch/lumen/variables.scss";
-@import "bulmaswatch/lumen/variables.scss";
-@import "./custom_variables";
+@import 'bulmaswatch/lumen/variables.scss';
+@import 'bulmaswatch/lumen/variables.scss';
+@import './custom_variables';
 
-@import "bulma/sass/utilities/_all.sass";
+@import 'bulma/sass/utilities/_all.sass';
 
 // Don't remove commented out code here: they are disabled bulma modules
 
-@import "bulma/sass/base/minireset.sass";
+@import 'bulma/sass/base/minireset.sass';
 //@import "bulma/sass/form/file.sass";
-@import "bulma/sass/form/shared.sass";
-@import "bulma/sass/form/input-textarea.sass";
-@import "bulma/sass/form/all.sass";
+@import 'bulma/sass/form/shared.sass';
+@import 'bulma/sass/form/input-textarea.sass';
+@import 'bulma/sass/form/all.sass';
 //@import "bulma/sass/form/select.sass";
 //@import "bulma/sass/form/checkbox-radio.sass";
 //@import "bulma/sass/form/tools.sass";
 //@import "bulma/sass/grid/tiles.sass";
-@import "bulma/sass/grid/columns.sass";
+@import 'bulma/sass/grid/columns.sass';
 /* @import "bulma/sass/elements/progress.sass"; */
 //@import "bulma/sass/elements/other.sass";
 //@import "bulma/sass/elements/notification.sass";
-@import "bulma/sass/elements/icon.sass";
-@import "bulma/sass/elements/image.sass";
+@import 'bulma/sass/elements/icon.sass';
+@import 'bulma/sass/elements/image.sass';
 // @import "bulma/sass/elements/button.sass";
 // @import "bulma/sass/elements/title.sass";
-@import "bulma/sass/elements/content.sass";
-@import "bulma/sass/elements/box.sass";
+@import 'bulma/sass/elements/content.sass';
+@import 'bulma/sass/elements/box.sass';
 //@import "bulma/sass/elements/table.sass";
-@import "bulma/sass/elements/container.sass";
-@import "bulma/sass/elements/tag.sass";
-@import "bulma/sass/layout/section.sass";
+@import 'bulma/sass/elements/container.sass';
+@import 'bulma/sass/elements/tag.sass';
+@import 'bulma/sass/layout/section.sass';
 /* @import "bulma/sass/layout/footer.sass"; */
-@import "bulma/sass/layout/hero.sass";
-@import "bulma/sass/base/generic.sass";
-@import "bulma/sass/helpers/_all.sass";
+@import 'bulma/sass/layout/hero.sass';
+@import 'bulma/sass/base/generic.sass';
+@import 'bulma/sass/helpers/_all.sass';
 //@import "bulma/sass/components/pagination.sass";
 //@import "bulma/sass/components/level.sass";
 //@import "bulma/sass/components/message.sass";
@@ -46,127 +46,133 @@
 //@import "bulma/sass/components/tabs.sass";
 //@import "bulma/sass/components/dropdown.sass";
 /* @import "bulma/sass/components/card.sass"; */
-@import "bulma/sass/components/media.sass";
-
+@import 'bulma/sass/components/media.sass';
 
 .md-page a {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* Shared LibreLingo surface and card styles */
 .app-page {
-    min-height: 100vh;
-    padding: 1.5rem 0 4rem;
-    background: radial-gradient(circle at top left, rgba(134, 77, 203, 0.14), transparent 25%),
-        linear-gradient(180deg, rgba(247, 244, 255, 0.95), #ffffff 100%);
+	min-height: 100vh;
+	padding: 1.5rem 0 4rem;
+	background:
+		radial-gradient(circle at top left, rgba(134, 77, 203, 0.14), transparent 25%),
+		linear-gradient(180deg, rgba(247, 244, 255, 0.95), #ffffff 100%);
 }
 
 .surface-container {
-    padding-right: 20px;
-    padding-left: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
+	padding-right: 20px;
+	padding-left: 20px;
+	max-width: 1400px;
+	margin: 0 auto;
 }
 
 .surface-card {
-    padding: 2.5rem;
-    border-radius: 32px;
-    border: 1px solid rgba(134, 77, 203, 0.08);
-    background: rgba(255, 255, 255, 0.82);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 24px 80px rgba(110, 65, 195, 0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+	padding: 2.5rem;
+	border-radius: 32px;
+	border: 1px solid rgba(134, 77, 203, 0.08);
+	background: rgba(255, 255, 255, 0.82);
+	backdrop-filter: blur(10px);
+	box-shadow: 0 24px 80px rgba(110, 65, 195, 0.08);
+	transition:
+		transform 0.25s ease,
+		box-shadow 0.25s ease,
+		border-color 0.25s ease;
 }
 
 .surface-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 28px 55px rgba(75, 40, 120, 0.12);
-    border-color: rgba(134, 77, 203, 0.28);
+	transform: translateY(-3px);
+	box-shadow: 0 28px 55px rgba(75, 40, 120, 0.12);
+	border-color: rgba(134, 77, 203, 0.28);
 }
 
 .surface-block {
-    margin-bottom: 2rem;
+	margin-bottom: 2rem;
 }
 
 .surface-section-heading {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1.75rem;
 }
 
 .surface-section-heading h2 {
-    margin: 0;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: #3a1f71;
+	margin: 0;
+	font-weight: 800;
+	letter-spacing: -0.04em;
+	color: #3a1f71;
 }
 
 .surface-section-heading p {
-    max-width: 520px;
-    margin: 0;
-    font-size: 1rem;
-    color: #5e4f74;
+	max-width: 520px;
+	margin: 0;
+	font-size: 1rem;
+	color: #5e4f74;
 }
 
 .surface-grid {
-    gap: 1.4rem;
-    justify-content: center;
+	gap: 1.4rem;
+	justify-content: center;
 }
 
 .lluis-card {
-    border: 1px solid rgba(134, 77, 203, 0.18);
-    border-radius: 24px;
-    box-shadow: 0 20px 45px rgba(75, 40, 120, 0.08);
-    background-color: rgba(255, 255, 255, 0.96);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+	border: 1px solid rgba(134, 77, 203, 0.18);
+	border-radius: 24px;
+	box-shadow: 0 20px 45px rgba(75, 40, 120, 0.08);
+	background-color: rgba(255, 255, 255, 0.96);
+	transition:
+		transform 0.25s ease,
+		box-shadow 0.25s ease,
+		border-color 0.25s ease;
 }
 
 .lluis-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 28px 55px rgba(75, 40, 120, 0.12);
-    border-color: rgba(134, 77, 203, 0.28);
+	transform: translateY(-3px);
+	box-shadow: 0 28px 55px rgba(75, 40, 120, 0.12);
+	border-color: rgba(134, 77, 203, 0.28);
 }
 
 .lluis-card-content {
-    padding-top: 1.4rem;
+	padding-top: 1.4rem;
 }
 
 .lluis-card-footer {
-    padding-top: 0.8rem;
+	padding-top: 0.8rem;
 }
 
 .card-footer-item {
-    justify-content: flex-end;
-    padding: 0;
+	justify-content: flex-end;
+	padding: 0;
 }
 
 .media {
-    align-items: flex-start;
-    gap: 1rem;
+	align-items: flex-start;
+	gap: 1rem;
 }
 
 .media-left .image-set {
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(134, 77, 203, 0.12);
+	border-radius: 18px;
+	overflow: hidden;
+	border: 1px solid rgba(134, 77, 203, 0.12);
 }
 
 @media (max-width: 768px) {
-    .app-page {
-        padding-top: 1rem;
-    }
+	.app-page {
+		padding-top: 1rem;
+	}
 
-    .surface-card {
-        padding: 1.75rem;
-    }
+	.surface-card {
+		padding: 1.75rem;
+	}
 
-    .surface-section-heading {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+	.surface-section-heading {
+		flex-direction: column;
+		align-items: flex-start;
+	}
 }
 
-@import "bulmaswatch/lumen/overrides.scss";
+@import 'bulmaswatch/lumen/overrides.scss';

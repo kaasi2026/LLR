@@ -11,7 +11,6 @@
 </div>
 
 <style type="text/scss">
-
 	.completed,
 	.stale {
 		color: $white;

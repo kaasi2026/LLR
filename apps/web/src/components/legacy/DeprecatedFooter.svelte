@@ -1,11 +1,11 @@
 <div class="footer">
-  <slot />
+	<slot />
 </div>
 
 <style>
-  .footer {
-    margin-top: 12em;
-    background-color: #fafafa;
-    padding: 3rem 1.5rem 6rem;
-  }
+	.footer {
+		margin-top: 12em;
+		background-color: #fafafa;
+		padding: 3rem 1.5rem 6rem;
+	}
 </style>

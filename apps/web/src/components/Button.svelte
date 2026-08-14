@@ -47,7 +47,7 @@
 {/if}
 
 <style>
-:global(.lluis-button) {
+	:global(.lluis-button) {
 		font-size: var(--font-size-normal);
 		line-height: calc(var(--font-size-normal) * 1.5);
 		gap: 0.5rem;

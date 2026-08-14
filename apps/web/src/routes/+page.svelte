@@ -10,10 +10,9 @@
 	import Mascot from 'components/Mascot.svelte';
 	import Heading from 'components/Heading.svelte';
 
-	import {page} from '$app/state';
+	import { page } from '$app/state';
 
-	let coursesFs = page.data.coursesFs
-
+	let coursesFs = page.data.coursesFs;
 </script>
 
 <svelte:head>
@@ -25,7 +24,6 @@
 	<Page>
 		<Hero>
 			<Stack direction="column" spacing="m" fullHeight justify="center">
-
 				<Stack spacing="m" direction="column" directionDesktop="row">
 					<Stack shrink={4}>
 						<Mascot shadow={false} glow={true} />
@@ -41,18 +39,19 @@
 
 				<Stack spacing="m" direction="column">
 					<!-- For each courses available locally.. -->
-					 {#if coursesFs}
+					{#if coursesFs}
 						<h3 style="text-align:center">Courses available locally</h3>
-						{#each coursesFs as course }
+						{#each coursesFs as course (course.path)}
 							<Stack justify="center">
 								<Button style="primary" size="large" href="course/{course.path}">
-									<Translate key="index.start_{course.language}_course">Start learning {course.language}</Translate>
+									<Translate key="index.start_{course.language}_course"
+										>Start learning {course.language}</Translate
+									>
 								</Button>
 							</Stack>
 						{/each}
-					 {/if}
+					{/if}
 				</Stack>
-
 			</Stack>
 
 			<Hidden>

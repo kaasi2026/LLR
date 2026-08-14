@@ -1,12 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import hotkeys from 'hotkeys-js';
-	import shuffle from 'lodash.shuffle';
 	import { writable } from 'svelte/store';
 	import ChallengePanel from '../ChallengePanel.svelte';
 	import Phrase from '../Phrase.svelte';
 	import { createSortable } from './sortable';
 	import { getNodeType, getChipIndex } from './chips';
+
+	// TODO: remove this
+	function shuffle<T>(array: T[]): T[] {
+		const result = [...array];
+		for (let i = result.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[result[i], result[j]] = [result[j], result[i]];
+		}
+		return result;
+	}
 
 	export let challenge;
 	export let registerResult;
@@ -188,7 +197,6 @@
 </form>
 
 <style type="text/scss">
-
 	.chip {
 		user-select: none;
 		margin: 0.5em 0.3em;

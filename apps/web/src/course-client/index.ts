@@ -70,7 +70,7 @@ export type CourseDataType = {
 
 const formatCourseData = (rawCourseData, { courseName }) => {
 	const { modules, languageName, repositoryURL, languageCode, specialCharacters, uiLanguage } =
-	rawCourseData;
+		rawCourseData;
 
 	return {
 		courseName,
@@ -84,7 +84,10 @@ const formatCourseData = (rawCourseData, { courseName }) => {
 };
 
 const normalizeCoursePath = (courseName: string, relativePath: string) => {
-	let normalized = relativePath.replace(/^\.\.\//, '').replace(/^\.\//, '').replace(/^\//, '');
+	let normalized = relativePath
+		.replace(/^\.\.\//, '')
+		.replace(/^\.\//, '')
+		.replace(/^\//, '');
 
 	// Handle paths that already include an aliased or absolute course path.
 	// Examples:
@@ -150,7 +153,9 @@ export const loadMarkdownIntroduction = async ({
 	importModule?: (courseName: string, relativePath: string) => Promise<any>;
 }) => {
 	const loader = readFile ?? getCoursePath;
-	const importer = importModule ?? ((name: string, path: string) => importMaybeDefault(`../courses/${name}/${path}`));
+	const importer =
+		importModule ??
+		((name: string, path: string) => importMaybeDefault(`../courses/${name}/${path}`));
 	let markdown = '';
 
 	if (typeof window === 'undefined') {
@@ -204,8 +209,11 @@ export const get_course = async ({
 			return formatCourseData(rawCourseData, { courseName });
 		} catch (importError) {
 			const fileMessage = fileError instanceof Error ? fileError.message : String(fileError);
-			const importMessage = importError instanceof Error ? importError.message : String(importError);
-			throw new Error(`${errorMessage}\nFile load error: ${fileMessage}\nImport error: ${importMessage}`);
+			const importMessage =
+				importError instanceof Error ? importError.message : String(importError);
+			throw new Error(
+				`${errorMessage}\nFile load error: ${fileMessage}\nImport error: ${importMessage}`
+			);
 		}
 	}
 
@@ -253,12 +261,16 @@ export const get_skill_data = async ({
 			const skillData = JSON.parse(raw);
 			return await formatSkilldata(skillData, { courseName, skillName });
 		} catch (err) {
-			const skillData = await importMaybeDefault(`../courses/${courseName}/challenges/${skillName}.json`);
+			const skillData = await importMaybeDefault(
+				`../courses/${courseName}/challenges/${skillName}.json`
+			);
 			return await formatSkilldata(skillData, { courseName, skillName });
 		}
 	}
 
-	const skillData = await importMaybeDefault(`../courses/${courseName}/challenges/${skillName}.json`);
+	const skillData = await importMaybeDefault(
+		`../courses/${courseName}/challenges/${skillName}.json`
+	);
 
 	return await formatSkilldata(skillData, { courseName, skillName });
 };
@@ -297,7 +309,9 @@ export const get_skill_introduction = async ({
 				if (skill.practiceHref === skillName) {
 					const introductionPath = normalizeCoursePath(
 						courseName,
-						skill.introduction ? `introduction/${skill.introduction}` : `introduction/${skillName}.md`
+						skill.introduction
+							? `introduction/${skill.introduction}`
+							: `introduction/${skillName}.md`
 					);
 
 					let markdown = await loadMarkdownIntroduction({

@@ -7,12 +7,21 @@
 	import ChipsChallenge from './ChipsChallenge/index.svelte';
 	import FanfareScreen from '../FanfareScreen.svelte';
 	import ProgressBar from '../ProgressBar.svelte';
-	import shuffle from 'lodash.shuffle';
 	import { fade, scale } from 'svelte/transition';
 	// TODO: deal with this ignore comment
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	//import db from '../db/db';
 	import isBrowser from 'utils/isBrowser';
+
+	// TODO: remove this
+	function shuffle<T>(array: T[]): T[] {
+		const result = [...array];
+		for (let i = result.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[result[i], result[j]] = [result[j], result[i]];
+		}
+		return result;
+	}
 
 	export let rawChallenges;
 	export let languageName;
@@ -86,8 +95,7 @@
 		new Image().src = `/images/${imageName}`;
 	};
 
-	challenges &&
-		challenges.map((c: any) => c.pictures && c.pictures.map(preloadImage));
+	challenges && challenges.map((c: any) => c.pictures && c.pictures.map(preloadImage));
 
 	$: alternativeChallenges =
 		currentChallenge && rawChallenges.filter(({ id }) => id !== currentChallenge.id);

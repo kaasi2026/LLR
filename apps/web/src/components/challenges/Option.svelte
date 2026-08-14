@@ -18,7 +18,6 @@
 </li>
 
 <style type="text/scss">
-
 	.option {
 		padding: 0.75em 0;
 		transition:

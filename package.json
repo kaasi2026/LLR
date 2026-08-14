@@ -1,101 +1,30 @@
 {
-	"name": "@librelingo/monorepo",
+	"name": "librelingorelive",
 	"private": true,
-	"engines": {
-		"node": ">=22.0.0"
-	},
+	"type": "module",
 	"scripts": {
-		"web-serve": "npm run -w @librelingo/web dev",
-		"export:production": "npm run installAllExternalCourses && npm run exportAllCourses && npm run -w apps/web export && npm run docs:build && pdm run python apps/tools/librelingo_tools/generate.py --courses ./config/courses.json --outdir ./export/course-tools-legacy",
-		"export": "npm run -w apps/web export",
-		"commit": "git-cz",
-		"test": "jest",
-		"test:ci": "npm run -w apps/web test:ci",
-		"types": "npm workspaces run types",
+		"dev": "npm run dev -w web",
 		"format": "eslint . --fix --max-warnings=0 && prettier --write apps/**/*.svelte docs --ignore-path ./.prettierignore_for_svelte",
 		"lint": "eslint . --max-warnings=0 && prettier --check apps/**/*.svelte docs --ignore-path ./.prettierignore_for_svelte",
 		"exportAllCourses": "./scripts/exportAllYamlCourses.sh",
-		"exportCourse": "./scripts/exportYamlCourse.sh",
-		"docs": "pdm run mkdocs serve -a 0.0.0.0:8000",
-		"docs:build": "pdm run mkdocs build",
-		"release-all": "npx nx release",
-		"release-web": "npx nx release --projects=@librelingo/web",
-		"release-lluis": "npx nx release --projects=lluis",
-		"release-answer-corrector": "npx nx release --projects=@librelingo/answer-corrector"
+		"exportCourse": "./scripts/exportYamlCourse.sh"
 	},
 	"workspaces": {
 		"packages": [
 			"apps/*"
-		],
-		"nohoist": [
-			"**/bulma",
-			"**/bulma/**",
-			"**/@openfonts/**",
-			"**/svelte/**",
-			"svelte/**",
-			"svelte",
-			"**/svelte"
 		]
 	},
 	"devDependencies": {
-		"@babel/preset-typescript": "7.24.1",
-		"@nx/eslint": "20.3.2",
-		"@nx/vite": "20.3.2",
-		"@tsconfig/svelte": "3.0.0",
-		"@types/jest": "29.5.12",
-		"@types/node": "20.12.10",
-		"@typescript-eslint/eslint-plugin": "5.62.0",
-		"@typescript-eslint/parser": "5.62.0",
-		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "8.57.0",
-		"eslint-config-prettier": "9.1.0",
-
-		"eslint-plugin-jest": "27.9.0",
-		"eslint-plugin-prettier": "4.2.1",
-		"eslint-plugin-svelte3": "4.0.0",
-		"nx": "20.3.2",
-		"prettier": "2.8.8",
-		"prettier-plugin-svelte": "2.10.1",
-		"remark": "15.0.1",
-		"semantic-release": "19.0.5",
-		"semantic-release-monorepo": "7.0.8",
-		"source-map-loader": "4.0.2",
-		"svelte": "3.59.2",
-		"svelte-check": "3.7.1",
-		"svelte-preprocess": "4.10.7",
-		"typescript": "4.9.5"
-	},
-	"nyc": {
-		"report-dir": "coverage",
-		"extension": [
-			".js",
-			".svelte"
-		],
-		"all": true,
-		"cache": false
-	},
-	"config": {
-		"commitizen": {
-			"path": "./node_modules/cz-conventional-changelog"
-		}
-	},
-	"husky": {
-		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-		}
-	},
-
-	"release": {
-		"extends": "semantic-release-monorepo",
-		"branches": [
-			"main"
-		]
-	},
-	"msw": {
-		"workerDirectory": "apps/web/static"
-	},
-	"optionalDependencies": {
-		"@rollup/rollup-darwin-arm64": "^4.34.1",
-		"@rollup/rollup-linux-x64-gnu": "^4.34.1"
+		"@eslint/js": "^10.0.1",
+		"@types/node": "^24",
+		"eslint": "^10.4.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.19.0",
+		"globals": "^17.6.0",
+		"prettier": "^3.8.3",
+		"prettier-plugin-svelte": "^4.1.0",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.60.1",
+		"vite": "^8.0.16"
 	}
 }

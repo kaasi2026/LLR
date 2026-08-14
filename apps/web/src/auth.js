@@ -1,9 +1,11 @@
-import { writable } from "svelte/store"
+// TODO: Move to lib
+
+import { writable } from 'svelte/store';
 
 const authStore = writable({
-  user: null,
-  online: null,
-  dbUpdatedAt: null,
-})
+	user: null,
+	online: null,
+	dbUpdatedAt: null
+});
 
-export default authStore
+export default authStore;

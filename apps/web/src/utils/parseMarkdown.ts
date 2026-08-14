@@ -3,16 +3,16 @@ import showdown from 'showdown';
 export default function parseMarkdown(rawMarkdown: any) {
 	// Ensure rawMarkdown is a string
 	let markdownText: string = '';
-	
+
 	console.log('parseMarkdown input type:', typeof rawMarkdown);
 	console.log('parseMarkdown input:', rawMarkdown);
-	
+
 	if (typeof rawMarkdown === 'string') {
 		markdownText = rawMarkdown;
 	} else if (rawMarkdown && typeof rawMarkdown === 'object') {
 		// Handle imported markdown objects from vite-plugin-markdown
 		console.log('Markdown is object, keys:', Object.keys(rawMarkdown));
-		
+
 		if ('default' in rawMarkdown && typeof rawMarkdown.default === 'string') {
 			console.log('Using rawMarkdown.default');
 			markdownText = rawMarkdown.default;
@@ -37,7 +37,7 @@ export default function parseMarkdown(rawMarkdown: any) {
 					break;
 				}
 			}
-			
+
 			if (!markdownText) {
 				console.warn('Could not extract markdown text from object');
 			}
@@ -45,13 +45,13 @@ export default function parseMarkdown(rawMarkdown: any) {
 	} else {
 		console.warn('Invalid markdown input type:', typeof rawMarkdown);
 	}
-	
+
 	console.log('Final markdownText (first 100 chars):', markdownText.substring(0, 100));
-	
+
 	if (!markdownText.trim()) {
 		console.warn('WARNING: Empty markdown text!');
 	}
-	
+
 	const converter = new showdown.Converter();
 	const html = converter.makeHtml(markdownText);
 	return html;

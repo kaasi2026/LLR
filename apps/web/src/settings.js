@@ -1,3 +1,4 @@
+// TODO: Too many settings
 import settings from '../config/settings.json';
 import Cookies from 'js-cookie';
 
