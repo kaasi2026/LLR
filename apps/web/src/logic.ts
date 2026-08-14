@@ -1,3 +1,5 @@
+// TODO: Make this more descriptive and move to lib
+
 // TODO: remove this
 function shuffle<T>(array: T[]): T[] {
 	const result = [...array];
@@ -27,6 +29,7 @@ function uniqBy<T>(array: T[], iteratee: keyof T | ((item: T) => unknown)): T[] 
 	return result;
 }
 
+// TODO: Revise this
 export const prepareChallenge = ({
 	currentChallenge,
 	alternativeChallenges,
@@ -57,12 +60,12 @@ export const prepareChallenge = ({
 	const incorrectOptionsWithFake =
 		incorrectOptions.length >= 2
 			? [
-					{
-						...incorrectOptionsSample[0],
-						fake: true
-					},
-					...incorrectOptionsSample.slice(1)
-				]
+				{
+					...incorrectOptionsSample[0],
+					fake: true
+				},
+				...incorrectOptionsSample.slice(1)
+			]
 			: [];
 
 	return shuffle([correctOption, ...incorrectOptionsWithFake]);

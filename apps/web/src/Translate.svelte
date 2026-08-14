@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: This shouldn't be needed anymore
 	import { format } from 'svelte-i18n';
 	import isBrowser from './utils/isBrowser';
 
