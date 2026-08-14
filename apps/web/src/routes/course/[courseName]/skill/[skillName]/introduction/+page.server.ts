@@ -1,3 +1,5 @@
+// TODO: clean this up
+
 import { get_skill_introduction } from 'course-client';
 import parseMarkdown from '../../../../../../utils/parseMarkdown';
 import { fileURLToPath } from 'url';
