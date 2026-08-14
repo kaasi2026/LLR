@@ -7,15 +7,21 @@
 	import Columns from 'components/Columns.svelte';
 	import Content from 'components/Content.svelte';
 	import Footer from 'components/Footer.svelte';
-	import type { ModulesType } from 'types/ModulesType';
-	import { page } from '$app/state';
 
-	export const courseName = page.data.course.courseName;
-	export let modules: ModulesType = page.data.course.modules;
-	export let languageName = page.data.course.languageName;
-	export const repositoryURL = page.data.course.repositoryURL;
-	export let uiLanguage = 'es';
-	locale.set(uiLanguage);
+	let { data } = $props();
+
+	let course = $derived(data.course);
+	let courseName = $derived(course?.courseName);
+	let modules = $derived(course?.modules ?? []);
+	let languageName = $derived(course?.languageName);
+	let repositoryURL = $derived(course?.repositoryURL);
+	let uiLanguage = $derived(data.uiLanguage ?? 'es');
+
+	$effect(() => {
+		if (uiLanguage) {
+			locale.set(uiLanguage);
+		}
+	});
 </script>
 
 <svelte:head>
@@ -25,7 +31,7 @@
 <main class="course-page app-page">
 	<NavBar hasAuth {repositoryURL} />
 
-	{#each modules as { title, skills }}
+	{#each modules as { title, skills } (title)}
 		<section class="section surface-card surface-block">
 			<div class="container surface-container">
 				<div class="surface-section-heading">
@@ -33,10 +39,10 @@
 					<!-- Description removed per design request -->
 				</div>
 				<Columns multiline class="surface-grid">
-					{#each skills as skill}
+					{#each skills as skill (skill.id)}
 						<Column sizeDesktop="1/3" sizeTablet="1/2">
 							<SkillCard
-								{...{ ...skill }}
+								{...skill}
 								practiceHref={`/course/${courseName}/skill/${skill.practiceHref}`}
 							/>
 						</Column>
