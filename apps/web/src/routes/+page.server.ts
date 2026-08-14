@@ -35,11 +35,11 @@ export async function load() {
 
 				if (!hasJsonFile) continue;
 
-				// Leggi il file JSON per ottenere la lingua del corso
+				// Read the JSON file to get the course language
 				const jsonData = await readFile(courseDataPath, 'utf-8');
 				const courseLanguage = JSON.parse(jsonData);
 
-				// Aggiungi il corso alla lista
+				// Add the course to the list
 				verifiedFolderList.push({
 					path: folder,
 					language: courseLanguage.languageName.toLowerCase()
