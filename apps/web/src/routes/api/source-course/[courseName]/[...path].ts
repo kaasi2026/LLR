@@ -1,5 +1,5 @@
-// There are waayyyy to many way to look up files within a course
-// This might even be a security problem
+// TODO: There are waayyyy to many way to look up files within a course
+// SECURITY: This might even be a security problem
 
 import { error } from '@sveltejs/kit';
 import { fileURLToPath } from 'url';
