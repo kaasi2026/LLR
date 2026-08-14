@@ -1,6 +1,6 @@
 export default {
-    legalLinks: {
-        imprint: '/imprint',
-        privacy: '/privacy',
-    },
+	legalLinks: {
+		imprint: '/imprint',
+		privacy: '/privacy'
+	}
 };

@@ -18,10 +18,5 @@
 		".svelte-kit/ambient.d.ts",
 		".svelte-kit/types/**/$types.d.ts"
 	],
-	"exclude": [
-		"node_modules",
-		".svelte-kit",
-		"build",
-		"dist"
-	]
+	"exclude": ["node_modules", ".svelte-kit", "build", "dist"]
 }

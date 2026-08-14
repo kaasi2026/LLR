@@ -77,7 +77,7 @@
 		? [
 				...[...challenges].filter((challenge) => challenge.id === testChallenge),
 				...[...challenges].filter((challenge) => challenge.id !== testChallenge)
-		  ]
+			]
 		: [...challenges];
 
 	let currentChallenge = remainingChallenges.shift();

@@ -36,7 +36,8 @@
 
 <style lang="scss">
 	:global(.intro-page) {
-		background: radial-gradient(circle at top left, rgba(134, 77, 203, 0.14), transparent 22%),
+		background:
+			radial-gradient(circle at top left, rgba(134, 77, 203, 0.14), transparent 22%),
 			linear-gradient(180deg, rgba(241, 236, 255, 0.95), #f7f2ff 100%);
 	}
 

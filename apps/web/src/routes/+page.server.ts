@@ -1,62 +1,64 @@
-import fs from "node:fs"; import { readdir } from 'fs/promises';
+import fs from 'node:fs';
+import { readdir } from 'fs/promises';
 import path from 'path';
 import { readFile } from 'fs/promises';
 
 const getDirectories = async (source: string) => {
-    const files = await readdir(source, { withFileTypes: true });
-    return files.filter(dirent => dirent.isDirectory()).filter(dir => !dir.name.includes('test')).map(dirent => dirent.name);
+	const files = await readdir(source, { withFileTypes: true });
+	return files
+		.filter((dirent) => dirent.isDirectory())
+		.filter((dir) => !dir.name.includes('test'))
+		.map((dirent) => dirent.name);
 };
 
 export async function load() {
-    const testFolder = 'src/courses';
-    let verifiedFolderList: Array<{ path: string; language: string }> = [];
-    
-    if (fs.existsSync(testFolder)) {
-        const folderList = await getDirectories(testFolder);
+	const testFolder = 'src/courses';
+	let verifiedFolderList: Array<{ path: string; language: string }> = [];
 
-        for (let folder of folderList) {
-            let folderPath = path.join(testFolder, folder);
+	if (fs.existsSync(testFolder)) {
+		const folderList = await getDirectories(testFolder);
 
-            try {
-                const courseDataPath = path.join(folderPath, 'courseData.json');
-            const challengesPath = path.join(folderPath, 'challenges');
+		for (let folder of folderList) {
+			let folderPath = path.join(testFolder, folder);
 
-            const courseDataFileExists = await fileExists(courseDataPath);
-            const challengesFolderExists = await fileExists(challengesPath);
+			try {
+				const courseDataPath = path.join(folderPath, 'courseData.json');
+				const challengesPath = path.join(folderPath, 'challenges');
 
-            if (!courseDataFileExists || !challengesFolderExists) continue;
+				const courseDataFileExists = await fileExists(courseDataPath);
+				const challengesFolderExists = await fileExists(challengesPath);
 
-            const files = await readdir(challengesPath);
-            const hasJsonFile = files.some(file => path.extname(file).toLowerCase() === '.json');
+				if (!courseDataFileExists || !challengesFolderExists) continue;
 
-            if (!hasJsonFile) continue;
+				const files = await readdir(challengesPath);
+				const hasJsonFile = files.some((file) => path.extname(file).toLowerCase() === '.json');
 
-            // Leggi il file JSON per ottenere la lingua del corso
-            const jsonData = await readFile(courseDataPath, 'utf-8');
-            const courseLanguage = JSON.parse(jsonData);
+				if (!hasJsonFile) continue;
 
-            // Aggiungi il corso alla lista
-            verifiedFolderList.push({
-                path: folder,
-                language: courseLanguage.languageName.toLowerCase(),
-            });
+				// Leggi il file JSON per ottenere la lingua del corso
+				const jsonData = await readFile(courseDataPath, 'utf-8');
+				const courseLanguage = JSON.parse(jsonData);
 
-            } catch (err) {
-                console.error(`Error during folder reading: ${err}`);
-                continue;
-            }
-        }
-    }
+				// Aggiungi il corso alla lista
+				verifiedFolderList.push({
+					path: folder,
+					language: courseLanguage.languageName.toLowerCase()
+				});
+			} catch (err) {
+				console.error(`Error during folder reading: ${err}`);
+				continue;
+			}
+		}
+	}
 
-
-    return { coursesFs: verifiedFolderList };
+	return { coursesFs: verifiedFolderList };
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
-    try {
-        await fs.promises.access(filePath);
-        return true;
-    } catch {
-        return false;
-    }
+	try {
+		await fs.promises.access(filePath);
+		return true;
+	} catch {
+		return false;
+	}
 }

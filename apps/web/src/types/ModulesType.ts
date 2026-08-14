@@ -1,3 +1,3 @@
-import type { ModuleType } from "./ModuleType"
+import type { ModuleType } from './ModuleType';
 
-export type ModulesType = ModuleType[]
+export type ModulesType = ModuleType[];
