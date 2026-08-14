@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: There is a duplicate of this at ../Translate.svelte
 	import { format } from 'svelte-i18n';
 	import isBrowser from './../utils/isBrowser';
 
