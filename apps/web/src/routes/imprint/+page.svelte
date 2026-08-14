@@ -3,6 +3,8 @@
 	import NavBar from 'components/NavBar.svelte';
 	import Footer from 'components/Footer.svelte';
 
+	// TODO make privacy.md a static import and render it properly
+
 	let content = '';
 
 	onMount(async () => {
