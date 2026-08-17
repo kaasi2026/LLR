@@ -3,7 +3,7 @@
 </script>
 
 <span class="spinner">
-	<Icon icon="spinner" ref="icon" />
+	<Icon icon="spinner" />
 </span>
 
 <style>
@@ -14,8 +14,9 @@
 		animation: spinner 0.6s linear infinite;
 	}
 
-	:global([ref='icon']) {
-		display: block;
-		margin: 0 !important;
+	@keyframes spinner {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>

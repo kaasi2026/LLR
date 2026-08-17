@@ -43,7 +43,7 @@
 						<h3 style="text-align:center">Courses available locally</h3>
 						{#each coursesFs as course (course.path)}
 							<Stack justify="center">
-								<Button style="primary" size="large" href="course/{course.path}">
+								<Button loading style="primary" size="large" href="course/{course.path}">
 									<Translate key="index.start_{course.language}_course"
 										>Start learning {course.language}</Translate
 									>
