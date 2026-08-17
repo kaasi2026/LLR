@@ -30,28 +30,31 @@
 </script>
 
 <Panel {background}>
-	<div slot="left">
-		{#if skipAction}
-			<Button on:click={skipAction}>Skip</Button>
-		{/if}
-		<Button on:click={skipAllAction}>Cancel</Button>
-		{#if skipAllVoice}
-			<Button on:click={skipAllVoice}>Can't listen now</Button>
-		{/if}
-		{#if message}<b>{message}</b>{/if}
-		{#if messageDetail}
-			<p>{messageDetail}</p>
-		{/if}
-	</div>
-
-	<div slot="right">
-		{#if buttonAction}
-			<Button style="primary" type="submit" on:click={buttonAction}>
-				{buttonText}
-			</Button>
-		{/if}
-		{#if submit}
-			<Button style="primary" type="submit">Submit</Button>
-		{/if}
-	</div>
+	{#snippet left()}
+		<div>
+			{#if skipAction}
+				<Button on:click={skipAction}>Skip</Button>
+			{/if}
+			<Button on:click={skipAllAction}>Cancel</Button>
+			{#if skipAllVoice}
+				<Button on:click={skipAllVoice}>Can't listen now</Button>
+			{/if}
+			{#if message}<b>{message}</b>{/if}
+			{#if messageDetail}
+				<p>{messageDetail}</p>
+			{/if}
+		</div>
+	{/snippet}
+	{#snippet right()}
+		<div>
+			{#if buttonAction}
+				<Button style="primary" type="submit" on:click={buttonAction}>
+					{buttonText}
+				</Button>
+			{/if}
+			{#if submit}
+				<Button style="primary" type="submit">Submit</Button>
+			{/if}
+		</div>
+	{/snippet}
 </Panel>
