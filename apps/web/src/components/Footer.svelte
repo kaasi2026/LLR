@@ -2,12 +2,14 @@
 	import Stack from './Stack.svelte';
 	import Translate from './Translate.svelte';
 	import LicenseLogo from './LicenseLogo.svelte';
+
+	let { children } = $props();
 </script>
 
 <div class="main-footer">
 	<Stack align="center" direction="column" spacing="s">
-		{#if $$slots.default}
-			<slot />
+		{#if children}
+			{@render children()}
 		{:else}
 			<div class="buttonset">
 				<a href="https://codeberg.org/LibreLingoRelive/LibreLingoRelive_Docs">

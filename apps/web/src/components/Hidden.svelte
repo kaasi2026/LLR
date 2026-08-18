@@ -1,3 +1,5 @@
+<!-- TODO: This looks a bit hacky -->
+
 <div>
 	<slot />
 </div>

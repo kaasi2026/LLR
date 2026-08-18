@@ -1,4 +1,5 @@
 <script>
+	// TODO: Check if this component is really necessary
 	import { onMount } from 'svelte';
 	import Icon from './Icon.svelte';
 

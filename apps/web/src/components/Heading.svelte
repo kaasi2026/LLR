@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: There's a very handy element named `<h1>` that does *exactly* the same thing
 	type HeadingLevel = 1 | 2;
 	export let level: HeadingLevel;
 </script>

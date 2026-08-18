@@ -1,6 +1,6 @@
 <img src="images/agpl-logo.svg" alt="Licensed under AGPL - Free as in Freedom" />
 
-<style type="text/scss">
+<style>
 	img {
 		height: 2.5em;
 		mix-blend-mode: multiply;
