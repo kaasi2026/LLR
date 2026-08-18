@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: This is just a standard flexbox layout
 	export let multiline = false;
 	export let reversed = false;
 </script>

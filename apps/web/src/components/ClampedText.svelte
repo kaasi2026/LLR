@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: This is just a CSS wrapper remove
 	export let text;
 </script>
 

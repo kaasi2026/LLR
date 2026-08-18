@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: Remove this
 	import type { SizeType } from 'types/types';
 
 	export let size: null | SizeType = null;

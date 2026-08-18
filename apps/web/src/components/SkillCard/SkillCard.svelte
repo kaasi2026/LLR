@@ -66,24 +66,30 @@
 	data-completed={completed}
 	data-stale={stale}
 >
-	<div slot="icon">
-		{#if completed}
-			{#if stale}
-				<Icon icon="dumbbell" size="large" />
-			{:else}
-				<Icon icon="check-square" size="large" />
+	{#snippet icon()}
+		<div slot="icon">
+			{#if completed}
+				{#if stale}
+					<Icon icon="dumbbell" size="large" />
+				{:else}
+					<Icon icon="check-square" size="large" />
+				{/if}
 			{/if}
-		{/if}
-	</div>
-	<div slot="content">
-		<div class="media">
-			<ContentLeft {imageSet} {stale} {completed} />
-			<ContentCenter {progress} {stale} {levels} {title} {completed} {started} {summary} />
 		</div>
-	</div>
-	<footer slot="footer">
-		<div class="card-footer-item">
-			<Buttons practiceHref={introductionPageHref || challengeHref} {started} {completed} />
+	{/snippet}
+	{#snippet content()}
+		<div slot="content">
+			<div class="media">
+				<ContentLeft {imageSet} {stale} {completed} />
+				<ContentCenter {progress} {stale} {levels} {title} {completed} {started} {summary} />
+			</div>
 		</div>
-	</footer>
+	{/snippet}
+	{#snippet footer()}
+		<footer slot="footer">
+			<div class="card-footer-item">
+				<Buttons practiceHref={introductionPageHref || challengeHref} {started} {completed} />
+			</div>
+		</footer>
+	{/snippet}
 </Card>

@@ -14,15 +14,15 @@
 		multiline = false,
 		children
 	}: {
-		sizeMobile: null | SizeType;
-		sizeTablet: null | SizeType;
-		sizeDesktop: null | SizeType;
-		isSubtitle: boolean;
-		isSpaced: boolean;
-		size: number;
-		textWeight: null | 'semibold';
-		align: null | 'centered';
-		multiline: boolean;
+		sizeMobile?: null | SizeType;
+		sizeTablet?: null | SizeType;
+		sizeDesktop?: null | SizeType;
+		isSubtitle?: boolean;
+		isSpaced?: boolean;
+		size?: number;
+		textWeight?: null | 'semibold';
+		align?: null | 'centered';
+		multiline?: boolean;
 		children: Snippet;
 	} = $props();
 </script>
