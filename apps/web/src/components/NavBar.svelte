@@ -3,8 +3,7 @@
 	import Logo from 'components/Logo.svelte';
 	import LinkOrButton from 'components/primitives/LinkOrButton.svelte';
 
-	export let hasAuth = false;
-	export let repositoryURL: string | null = null;
+	let { repositoryURL = null }: { repositoryURL?: string | null } = $props();
 
 	const courseName = page.params?.courseName || '';
 	const homepageLink = `/course/${courseName}`;
@@ -15,7 +14,7 @@
 		<Logo src="/images/logo.svg" alt="LibreLingo" link={homepageLink} />
 	</div>
 
-	<div class="navbar__middle" />
+	<div class="navbar__middle"></div>
 
 	<div class="navbar__right">
 		{#if repositoryURL}
