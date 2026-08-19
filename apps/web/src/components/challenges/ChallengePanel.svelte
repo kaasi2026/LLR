@@ -33,11 +33,11 @@
 	{#snippet left()}
 		<div>
 			{#if skipAction}
-				<Button on:click={skipAction}>Skip</Button>
+				<Button onclick={skipAction}>Skip</Button>
 			{/if}
-			<Button on:click={skipAllAction}>Cancel</Button>
+			<Button onclick={skipAllAction}>Cancel</Button>
 			{#if skipAllVoice}
-				<Button on:click={skipAllVoice}>Can't listen now</Button>
+				<Button onclick={skipAllVoice}>Can't listen now</Button>
 			{/if}
 			{#if message}<b>{message}</b>{/if}
 			{#if messageDetail}
@@ -48,7 +48,7 @@
 	{#snippet right()}
 		<div>
 			{#if buttonAction}
-				<Button style="primary" type="submit" on:click={buttonAction}>
+				<Button style="primary" type="submit" onclick={buttonAction}>
 					{buttonText}
 				</Button>
 			{/if}
