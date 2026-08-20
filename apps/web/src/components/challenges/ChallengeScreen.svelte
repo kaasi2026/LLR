@@ -8,10 +8,7 @@
 	import FanfareScreen from '../FanfareScreen.svelte';
 	import ProgressBar from '../ProgressBar.svelte';
 	import { fade, scale } from 'svelte/transition';
-	// TODO: deal with this ignore comment
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	//import db from '../db/db';
-	import isBrowser from 'utils/isBrowser';
+	import { browser } from '$app/environment';
 
 	// TODO: remove this
 	function shuffle<T>(array: T[]): T[] {
@@ -23,17 +20,18 @@
 		return result;
 	}
 
-	export let rawChallenges;
-	export let languageName;
-	export let languageCode;
-	export let specialCharacters;
-	export let sortChallengeGroups;
-	export let courseURL;
-	export let skillId;
-	export let expectedNumberOfChallenges;
+	let {
+		rawChallenges,
+		languageName,
+		languageCode,
+		specialCharacters,
+		sortChallengeGroups,
+		courseURL,
+		skillId,
+		expectedNumberOfChallenges
+	} = $props();
 
-	const testChallenge =
-		isBrowser() && new URLSearchParams(window.location.search).get('testChallenge');
+	const testChallenge = browser && new URLSearchParams(window.location.search).get('testChallenge');
 
 	type CardChallengeType = {
 		id: string;
@@ -73,17 +71,18 @@
 		expectedNumberOfChallenges
 	);
 
-	let remainingChallenges = testChallenge
-		? [
-				...[...challenges].filter((challenge) => challenge.id === testChallenge),
-				...[...challenges].filter((challenge) => challenge.id !== testChallenge)
-			]
-		: [...challenges];
+	let remainingChallenges = $state(
+		testChallenge
+			? [
+					...[...challenges].filter((challenge) => challenge.id === testChallenge),
+					...[...challenges].filter((challenge) => challenge.id !== testChallenge)
+				]
+			: [...challenges]
+	);
 
-	let currentChallenge = remainingChallenges.shift();
-	let solvedChallenges = [];
+	let currentChallenge = $state(remainingChallenges.shift());
+	let solvedChallenges = $state([]);
 
-	let progress = 0;
 	let stats = {
 		correct: 0,
 		incorrect: 0,
@@ -97,10 +96,12 @@
 
 	challenges && challenges.map((c: any) => c.pictures && c.pictures.map(preloadImage));
 
-	$: alternativeChallenges =
-		currentChallenge && rawChallenges.filter(({ id }) => id !== currentChallenge.id);
+	let alternativeChallenges = $derived(
+		currentChallenge &&
+			rawChallenges.filter(({ id }: { id: string }) => id !== currentChallenge?.id)
+	);
 
-	$: registerResult = (isCorrect: boolean) => {
+	const registerResult = (isCorrect: boolean) => {
 		if (isCorrect) {
 			stats.correct++;
 			sound.correct.play();
@@ -108,24 +109,26 @@
 		} else {
 			stats.incorrect++;
 			sound.wrong.play();
-			remainingChallenges.push(currentChallenge);
+			if (currentChallenge) {
+				remainingChallenges.push(currentChallenge);
+			}
 		}
 	};
 
-	$: progress = (solvedChallenges.length + stats.skipped) / challenges.length;
+	let progress = $derived((solvedChallenges.length + stats.skipped) / challenges.length);
 
-	$: resolveChallenge = () => {
+	const resolveChallenge = () => {
 		if (remainingChallenges) {
 			currentChallenge = remainingChallenges.shift();
 		}
 	};
 
-	$: skipChallenge = () => {
+	const skipChallenge = () => {
 		stats.skipped++;
 		resolveChallenge();
 	};
 
-	$: skipAllChallenges = async () => {
+	const skipAllChallenges = async () => {
 		if (solvedChallenges.length == 0) {
 			window.location.replace(courseURL);
 			return;
@@ -136,7 +139,7 @@
 		currentChallenge = undefined;
 	};
 
-	$: skipAllVoice = () => {
+	const skipAllVoice = () => {
 		let filteredRemainingChallenges = remainingChallenges.filter((challenge) => {
 			if (challenge.type === 'listeningExercise') {
 				stats.skipped++;

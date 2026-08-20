@@ -2,9 +2,17 @@
 	import { onMount } from 'svelte';
 	import hotkeys from 'hotkeys-js';
 	import OptionCard from './OptionCard.svelte';
-	export let options;
-	export let selectedOption;
-	export let disabled;
+	import type { AnswerOption } from '../types';
+
+	let {
+		options,
+		selectedOption = $bindable(null),
+		disabled
+	}: {
+		options: AnswerOption[];
+		selectedOption: number | null;
+		disabled: boolean;
+	} = $props();
 
 	// TODO: remove this
 	function shuffle<T>(array: T[]): T[] {
@@ -18,9 +26,14 @@
 
 	// determines which keys correspond to which card
 	// skips a number for the fake item (i. e. invisible on desktop)
-	let keymap = options.reduce(
-		(acc, item) => [...acc, (acc.slice(-1)[0] || 0) + (item.fake ? 2 : 1)],
-		[]
+	let keymap = $derived(
+		options.reduce(
+			(acc: number[], item: AnswerOption) => [
+				...acc,
+				(acc.slice(-1)[0] || 0) + (item.fake ? 2 : 1)
+			],
+			[]
+		)
 	);
 
 	onMount(() => {

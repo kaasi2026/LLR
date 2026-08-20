@@ -111,8 +111,6 @@
 
 	{#if answer === '' && !submitted}
 		<ChallengePanel
-			message={null}
-			buttonText={null}
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
 			{skipAllVoice}

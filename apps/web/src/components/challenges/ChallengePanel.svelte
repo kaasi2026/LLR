@@ -2,17 +2,31 @@
 	import Button from 'components/Button.svelte';
 	import Panel from 'components/Panel.svelte';
 
-	export let buttonText;
-	export let buttonAction = null;
-	export let correct = false;
-	export let incorrect = false;
-	export let typo = false;
-	export let message;
-	export let messageDetail = null;
-	export let submit = null;
-	export let skipAction = null;
-	export let skipAllAction = null;
-	export let skipAllVoice = null;
+	let {
+		buttonText,
+		buttonAction,
+		correct = false,
+		incorrect = false,
+		typo = false,
+		message,
+		messageDetail,
+		submit,
+		skipAction,
+		skipAllAction,
+		skipAllVoice
+	}: {
+		buttonText?: string;
+		buttonAction?: (e: Event) => void;
+		correct?: boolean;
+		incorrect?: boolean;
+		typo?: boolean;
+		message?: string;
+		messageDetail?: string;
+		submit?: boolean;
+		skipAction?: (e: Event) => void;
+		skipAllAction?: (e: Event) => void;
+		skipAllVoice?: (e: Event) => void;
+	} = $props();
 
 	let background: 'default' | 'success' | 'failure' | 'info' = (() => {
 		if (correct) {
