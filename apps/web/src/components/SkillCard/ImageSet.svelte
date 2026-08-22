@@ -1,7 +1,5 @@
 <script lang="ts">
-	export let imageSet;
-	export let completed;
-	export let stale;
+	let { imageSet, completed, stale } = $props();
 </script>
 
 {#if imageSet && imageSet.length === 3}

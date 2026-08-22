@@ -10,40 +10,41 @@
 	import ContentLeft from './ContentLeft.svelte';
 	import ContentCenter from './ContentCenter.svelte';
 
-	export let title: string;
-	export let levels: number;
-	export let practiceHref: string;
-	export let introduction: string;
-	//export let id: string; // Re-enable when db and onmount
-	export let imageSet: string[] = [];
-	export let summary: string;
+	// TODO: Add an id prop when we have the db
+	let {
+		title,
+		levels,
+		practiceHref,
+		introduction,
+		imageSet,
+		summary
+	}: {
+		title: string;
+		levels: number;
+		practiceHref: string;
+		introduction: string;
+		imageSet: string[];
+		summary: string;
+	} = $props();
 
-	let completed: boolean = false;
-	let started: boolean = false;
-	let stale: boolean = false;
-	let progress: boolean = false;
-	let challengeHref = practiceHref;
-	let introductionPageHref = introduction ? `${practiceHref}/introduction` : null;
-	let backgroundColor = 'white';
-	let foregroundColor = 'black';
+	let completed: boolean = $state(false);
+	let started: boolean = $state(false);
+	let stale: boolean = $state(false);
+	let progress: boolean = $state(false);
+	let challengeHref = $state(practiceHref);
+	let introductionPageHref = $derived(introduction ? `${practiceHref}/introduction` : null);
 
-	$: {
-		backgroundColor = (() => {
-			if (stale) return 'var(--deprecated-panel-background-failure)';
-			if (completed) return 'var(--deprecated-panel-background-success)';
-			return 'white';
-		})();
-	}
-
-	$: {
-		foregroundColor = (() => {
-			if (completed) return 'white';
-			if (stale) return 'white';
-			return 'black';
-		})();
-	}
+	let backgroundColor = $derived(
+		stale
+			? 'var(--deprecated-panel-background-failure)'
+			: completed
+				? 'var(--deprecated-panel-background-success)'
+				: 'white'
+	);
+	let foregroundColor = $derived(completed || stale ? 'white' : 'black');
 
 	onMount(() => {
+		// TODO: Uncomment when we have the db
 		/* live((db) =>
 			getSkillStats(db, { id })
 				.then((stats) => {
@@ -67,7 +68,7 @@
 	data-stale={stale}
 >
 	{#snippet icon()}
-		<div slot="icon">
+		<div>
 			{#if completed}
 				{#if stale}
 					<Icon icon="dumbbell" size="large" />
@@ -78,7 +79,7 @@
 		</div>
 	{/snippet}
 	{#snippet content()}
-		<div slot="content">
+		<div>
 			<div class="media">
 				<ContentLeft {imageSet} {stale} {completed} />
 				<ContentCenter {progress} {stale} {levels} {title} {completed} {started} {summary} />
@@ -86,7 +87,7 @@
 		</div>
 	{/snippet}
 	{#snippet footer()}
-		<footer slot="footer">
+		<footer>
 			<div class="card-footer-item">
 				<Buttons practiceHref={introductionPageHref || challengeHref} {started} {completed} />
 			</div>

@@ -1,9 +1,7 @@
 <script lang="ts">
 	import ImageSet from './ImageSet.svelte';
 
-	export let imageSet;
-	export let stale;
-	export let completed;
+	let { imageSet, stale, completed } = $props();
 </script>
 
 {#if imageSet && imageSet.length}
@@ -14,7 +12,7 @@
 	</div>
 {/if}
 
-<style type="text/scss">
+<style>
 	.stale,
 	.completed {
 		mix-blend-mode: screen;
