@@ -1,6 +1,6 @@
 <script lang="ts">
 	// TODO: This is just a CSS wrapper remove
-	export let text;
+	let { text } = $props();
 </script>
 
 <p class="is-6 clamp">{text}</p>

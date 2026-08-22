@@ -1,5 +1,4 @@
 <script lang="ts">
-	// TODO: Migrate to svelte 5
 	import { scale } from 'svelte/transition';
 	//import db from "../db/db"
 	//import savePractice from '../db/skill/savePractice';
@@ -13,9 +12,7 @@
 	import Columns from 'components/Columns.svelte';
 	import Title from 'components/Title.svelte';
 
-	export let courseURL;
-	export let skillId;
-	export let stats;
+	let { skillId, courseURL, stats } = $props();
 
 	onMount(async () => {
 		sound.fanfare.play();

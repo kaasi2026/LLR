@@ -1,10 +1,15 @@
 <script lang="ts">
 	// TODO: Remove this
+	import type { Snippet } from 'svelte';
 	import type { SizeType } from 'types/types';
 
-	export let size: null | SizeType = null;
-	export let sizeDesktop: null | SizeType = null;
-	export let sizeTablet: null | SizeType = null;
+	let {
+		size,
+		sizeDesktop,
+		sizeTablet,
+		children
+	}: { size?: SizeType; sizeDesktop?: SizeType; sizeTablet?: SizeType; children: Snippet } =
+		$props();
 </script>
 
 <div
@@ -21,5 +26,5 @@
 	class:is-1={size === '1'}
 	class="column"
 >
-	<slot />
+	{@render children()}
 </div>
