@@ -3,11 +3,13 @@
 	import { onMount } from 'svelte';
 	import Icon from './Icon.svelte';
 
-	let scroller;
-	let scrollPosition = 0;
-	let scrollWidth = 200;
-	let containerWidth = 100;
-	let needsScroll = scrollWidth > containerWidth;
+	let { children } = $props();
+
+	let scroller = $state();
+	let scrollPosition = $state(0);
+	let scrollWidth = $state(200);
+	let containerWidth = $state(100);
+	let needsScroll = $derived(scrollWidth > containerWidth);
 
 	const updateScrollPosition = () => {
 		scrollPosition = scroller.scrollLeft;
@@ -26,8 +28,8 @@
 </script>
 
 <div class="wrapper">
-	<div class="content" bind:this={scroller} on:scroll={updateScrollPosition}>
-		<slot />
+	<div class="content" bind:this={scroller} onscroll={updateScrollPosition}>
+		{@render children()}
 	</div>
 
 	{#if scrollPosition > 0}
@@ -39,7 +41,7 @@
 	{/if}
 </div>
 
-<style type="text/scss">
+<style>
 	.wrapper {
 		width: 100%;
 		height: 100%;
