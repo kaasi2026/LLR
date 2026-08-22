@@ -1,16 +1,11 @@
-const getActualParent = (node: HTMLElement): HTMLElement => {
-	if (node?.parentElement?.id) {
-		return node.parentElement;
+export const getNodeType = (node: HTMLElement): 'chips' | 'answer' | null => {
+	let parent = node.closest('#answer, #chips');
+	if (parent && (parent.id === 'chips' || parent.id === 'answer')) {
+		return parent.id;
+	} else {
+		return null;
 	}
-
-	if (node?.parentElement?.parentElement) {
-		return node.parentElement.parentElement;
-	}
-
-	throw new Error('Invalid <Chip />');
 };
-
-export const getNodeType = (node: HTMLElement): string => getActualParent(node).id;
 
 export const getChipIndex = (node: HTMLElement): number => {
 	if (!node.classList.contains('chip') && node.parentElement) {

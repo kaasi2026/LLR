@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import hotkeys from 'hotkeys-js';
-	import { writable } from 'svelte/store';
 	import ChallengePanel from '../ChallengePanel.svelte';
 	import Phrase from '../Phrase.svelte';
 	import { createSortable } from './sortable';
@@ -17,26 +16,23 @@
 		return result;
 	}
 
-	export let challenge;
-	export let registerResult;
-	export let resolveChallenge;
-	export let skipChallenge;
-	export let skipAllChallenges;
+	let { challenge, registerResult, resolveChallenge, skipChallenge, skipAllChallenges } = $props();
 
-	let submitted = false;
-	let correct = null;
+	let submitted = $state(false);
+	let correct: boolean | null = $state(null);
 	let chipsElement: HTMLElement;
 	let answerElement: HTMLElement;
-	const answer = writable([]);
-	let answerToRender = [];
-	let chipsToRender = shuffle(challenge.chips);
-	const chips = writable(chipsToRender);
+	let answer = $state([]);
+	let answerToRender = $state([]);
+	let chipsToRender = $state(shuffle(challenge.chips));
+	const chips = $state(chipsToRender);
 
-	$: submitChallenge = () => {
-		if (!$answer) return;
+	const submitChallenge = (e?: Event) => {
+		e?.preventDefault();
+		if (!answer) return;
 		if (submitted) return;
 		correct = false;
-		const answerForm = $answer.join(' ').toLowerCase();
+		const answerForm = answer.join(' ').toLowerCase();
 		challenge.solutions.map((solution: string[]) => {
 			correct = correct || answerForm === solution.join(' ').toLowerCase();
 		});
@@ -44,35 +40,28 @@
 		submitted = true;
 	};
 
-	$: finishChallenge = () => {
-		$answer = [];
+	const finishChallenge = () => {
+		answer = [];
 		submitted = false;
 		resolveChallenge();
 	};
 
-	$: handleChipClick = (event) => {
+	const handleChipClick = (event: Event) => {
 		if (submitted) return;
 		const node = event.target;
+		if (!(node instanceof HTMLElement)) return;
 		const chipType = getNodeType(node);
 		const chipText = node.innerText;
 		const chipIndex = getChipIndex(node);
 
 		if (chipType === 'chips') {
-			chips.update((oldItems) => {
-				const newItems = [...oldItems];
-				newItems.splice(chipIndex, 1);
-				return newItems;
-			});
-			answer.update((oldItems) => [...oldItems, chipText]);
+			chips.splice(chipIndex, 1);
+			answer.push(chipText);
 		}
 
 		if (chipType === 'answer') {
-			answer.update((oldItems) => {
-				const newItems = [...oldItems];
-				newItems.splice(chipIndex, 1);
-				return newItems;
-			});
-			chips.update((oldItems) => [...oldItems, chipText]);
+			answer.splice(chipIndex, 1);
+			chips.push(chipText);
 		}
 
 		rerenderSortables();
@@ -122,7 +111,7 @@
 	});
 </script>
 
-<form on:submit|preventDefault={submitChallenge}>
+<form onsubmit={submitChallenge}>
 	<div class="section">
 		<p class="is-size-1 is-size-2-tablet is-size-4-mobile has-text-centered">
 			Translate
@@ -134,12 +123,7 @@
 		<div class="solution">
 			<div id="answer" class="chips" bind:this={answerElement}>
 				{#each answerToRender as chip, index}
-					<span
-						class="chip"
-						data-id={chip}
-						on:click={handleChipClick}
-						on:keypress={handleChipClick}
-					>
+					<span class="chip" data-id={chip} onclick={handleChipClick} onkeypress={handleChipClick}>
 						<span class="tag is-medium">{chip}</span>
 					</span>
 				{/each}
@@ -149,7 +133,7 @@
 		<p class="sub-instructions">Use these words:</p>
 		<div id="chips" class="chips" bind:this={chipsElement}>
 			{#each chipsToRender as chip, index}
-				<span class="chip" data-id={chip} on:click={handleChipClick} on:keypress={handleChipClick}>
+				<span class="chip" data-id={chip} onclick={handleChipClick} onkeypress={handleChipClick}>
 					<span class="tag is-medium">{chip}</span>
 				</span>
 			{/each}
@@ -157,12 +141,7 @@
 	</div>
 
 	{#if $answer.length === 0 && !submitted}
-		<ChallengePanel
-			message={null}
-			buttonText={null}
-			skipAction={skipChallenge}
-			skipAllAction={skipAllChallenges}
-		/>
+		<ChallengePanel skipAction={skipChallenge} skipAllAction={skipAllChallenges} />
 	{/if}
 
 	{#if $answer.length > 0 && !submitted}

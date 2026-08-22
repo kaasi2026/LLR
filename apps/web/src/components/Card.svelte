@@ -1,5 +1,14 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	type Props = {
+		backgroundColor?: string;
+		foregroundColor?: string;
+		media?: Snippet;
+		content?: Snippet;
+		footer?: Snippet;
+		icon?: Snippet;
+	} & Record<string, any>;
+
 	let {
 		backgroundColor = 'white',
 		foregroundColor = 'black',
@@ -8,7 +17,7 @@
 		footer,
 		icon,
 		...restProps
-	} = $props();
+	}: Props = $props();
 </script>
 
 <div
