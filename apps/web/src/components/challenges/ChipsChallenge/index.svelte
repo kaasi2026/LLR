@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import hotkeys from 'hotkeys-js';
 	import ChallengePanel from '../ChallengePanel.svelte';
 	import Phrase from '../Phrase.svelte';
 	import { createSortable } from './sortable';
 	import { getNodeType, getChipIndex } from './chips';
+	import type Sortable from 'sortablejs';
 
 	// TODO: remove this
 	function shuffle<T>(array: T[]): T[] {
@@ -18,14 +19,23 @@
 
 	let { challenge, registerResult, resolveChallenge, skipChallenge, skipAllChallenges } = $props();
 
+	type ChipData = {
+		id: number;
+		text: string;
+	};
+
+	let initialChips: string[] = shuffle(challenge.chips);
+
 	let submitted = $state(false);
 	let correct: boolean | null = $state(null);
-	let chipsElement: HTMLElement;
-	let answerElement: HTMLElement;
-	let answer = $state([]);
-	let answerToRender = $state([]);
-	let chipsToRender = $state(shuffle(challenge.chips));
-	const chips = $state(chipsToRender);
+	let chipsElement: HTMLElement | undefined = $state();
+	let answerElement: HTMLElement | undefined = $state();
+	let answer: string[] = $state([]);
+	let answerToRender: ChipData[] = $state([]);
+	let chipsToRender: ChipData[] = $state(
+		initialChips.map((chip, i, _) => ({ id: i, text: chip as string }))
+	);
+	let chips = $state(initialChips);
 
 	const submitChallenge = (e?: Event) => {
 		e?.preventDefault();
@@ -56,45 +66,67 @@
 
 		if (chipType === 'chips') {
 			chips.splice(chipIndex, 1);
+			let chip = chipsToRender.splice(chipIndex, 1);
 			answer.push(chipText);
+			answerToRender.push(chip[0]);
 		}
 
 		if (chipType === 'answer') {
 			answer.splice(chipIndex, 1);
+			let chip = answerToRender.splice(chipIndex, 1);
 			chips.push(chipText);
+			chipsToRender.push(chip[0]);
 		}
 
 		rerenderSortables();
 	};
 
-	const rerenderSortables = () => {
+	const rerenderSortables = async () => {
 		chipsSortable.destroy();
 		answerSortable.destroy();
-		answerToRender = $answer;
-		chipsToRender = $chips;
-
+		await tick();
 		/*
         Need to wait for the re-rendering of the chips
         otherwise the svelte store and the sortable
         store will be out of sync
       */
-		setTimeout(initializeDragAndDrop, 0);
+		initializeDragAndDrop();
 	};
 
-	let chipsSortable;
-	let answerSortable;
-
-	const initializeSortable1 = () => {
-		chipsSortable = createSortable(chipsElement, chips);
-	};
-
-	const initializeSortable2 = () => {
-		answerSortable = createSortable(answerElement, answer);
-	};
+	let chipsSortable: Sortable;
+	let answerSortable: Sortable;
 
 	const initializeDragAndDrop = () => {
-		initializeSortable1();
-		initializeSortable2();
+		if (chipsElement && answerElement) {
+			chipsSortable = createSortable(chipsElement, () => {
+				let newChips = chipsSortable.toArray().map((idx) => {
+					let i = parseInt(idx);
+					return { text: initialChips[i], id: i };
+				});
+				chips = newChips.map((chip) => chip.text);
+				chipsToRender = newChips;
+				let newAnswer = answerSortable.toArray().map((idx) => {
+					let i = parseInt(idx);
+					return { text: initialChips[i], id: i };
+				});
+				answer = newAnswer.map((chip) => chip.text);
+				answerToRender = newAnswer;
+			});
+			answerSortable = createSortable(answerElement, () => {
+				let newChips = chipsSortable.toArray().map((idx) => {
+					let i = parseInt(idx);
+					return { text: initialChips[i], id: i };
+				});
+				chips = newChips.map((chip) => chip.text);
+				chipsToRender = newChips;
+				let newAnswer = answerSortable.toArray().map((idx) => {
+					let i = parseInt(idx);
+					return { text: initialChips[i], id: i };
+				});
+				answer = newAnswer.map((chip) => chip.text);
+				answerToRender = newAnswer;
+			});
+		}
 	};
 
 	onMount(() => {
@@ -106,7 +138,6 @@
 				submitChallenge();
 			}
 		});
-
 		initializeDragAndDrop();
 	});
 </script>
@@ -122,9 +153,14 @@
 	<div>
 		<div class="solution">
 			<div id="answer" class="chips" bind:this={answerElement}>
-				{#each answerToRender as chip, index}
-					<span class="chip" data-id={chip} onclick={handleChipClick} onkeypress={handleChipClick}>
-						<span class="tag is-medium">{chip}</span>
+				{#each answerToRender as chip (chip.id)}
+					<span
+						class="chip"
+						data-id={chip.id}
+						onclick={handleChipClick}
+						onkeypress={handleChipClick}
+					>
+						<span class="tag is-medium">{chip.text}</span>
 					</span>
 				{/each}
 			</div>
@@ -132,19 +168,19 @@
 
 		<p class="sub-instructions">Use these words:</p>
 		<div id="chips" class="chips" bind:this={chipsElement}>
-			{#each chipsToRender as chip, index}
-				<span class="chip" data-id={chip} onclick={handleChipClick} onkeypress={handleChipClick}>
-					<span class="tag is-medium">{chip}</span>
+			{#each chipsToRender as chip (chip.id)}
+				<span class="chip" data-id={chip.id} onclick={handleChipClick} onkeypress={handleChipClick}>
+					<span class="tag is-medium">{chip.text}</span>
 				</span>
 			{/each}
 		</div>
 	</div>
 
-	{#if $answer.length === 0 && !submitted}
+	{#if answer.length === 0 && !submitted}
 		<ChallengePanel skipAction={skipChallenge} skipAllAction={skipAllChallenges} />
 	{/if}
 
-	{#if $answer.length > 0 && !submitted}
+	{#if answer.length > 0 && !submitted}
 		<ChallengePanel
 			message=""
 			buttonText="Submit"
