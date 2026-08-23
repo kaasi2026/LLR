@@ -62,7 +62,7 @@
 	{#snippet right()}
 		<div>
 			{#if buttonAction}
-				<Button style="primary" type="submit" onclick={buttonAction}>
+				<Button style="primary" onclick={buttonAction}>
 					{buttonText}
 				</Button>
 			{/if}
