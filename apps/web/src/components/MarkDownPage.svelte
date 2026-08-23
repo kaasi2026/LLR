@@ -1,11 +1,21 @@
 <script lang="ts">
 	import NavBar from 'components/NavBar.svelte';
 	import Content from 'components/Content.svelte';
+	import type { Snippet } from 'svelte';
 
-	export let readmeHTML: string;
-	export let title: string | null;
-	export let description: string | null = null;
-	export let className: string = '';
+	let {
+		readmeHTML,
+		title,
+		description = null,
+		className = '',
+		children
+	}: {
+		readmeHTML: string;
+		title?: string;
+		description?: string | null;
+		className?: string;
+		children?: Snippet;
+	} = $props();
 </script>
 
 <svelte:head>
@@ -17,24 +27,21 @@
 
 <NavBar />
 
-<!-- Flexibler Container mit voller Höhe -->
 <section class={`hero is-primary md-page ${className}`}>
 	<div class="hero-body hero-body--column">
 		<div class="container container--column">
 			<h1 class="title">{title}</h1>
 			<div class="section box box--intro">
-				<!-- Markdown-Inhalt wird nur hier gerendert -->
 				<Content class="markdown-content">
 					{@html readmeHTML}
 				</Content>
-				<!-- Buttons kommen über den Slot -->
-				<slot />
+				{#if children}{@render children()}{/if}
 			</div>
 		</div>
 	</div>
 </section>
 
-<style lang="scss">
+<style>
 	:global(.intro-page) {
 		background:
 			radial-gradient(circle at top left, rgba(134, 77, 203, 0.14), transparent 22%),

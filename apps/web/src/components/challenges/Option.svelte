@@ -1,11 +1,8 @@
 <script lang="ts">
-	export let active;
-	export let inactive;
-	export let correct;
-	export let formInTargetLanguage;
+	let { active, inactive, correct, formInTargetLanguage } = $props();
 </script>
 
-<li class:active class:inactive>
+<div class:active class:inactive>
 	<div
 		class="option"
 		data-test={active ? 'active' : inactive ? 'inactive' : 'neutral'}
@@ -15,7 +12,7 @@
 			<div class="is-size-5 is-size-6-mobile">{formInTargetLanguage}</div>
 		</div>
 	</div>
-</li>
+</div>
 
 <style type="text/scss">
 	.option {

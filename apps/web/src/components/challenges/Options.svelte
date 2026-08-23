@@ -2,9 +2,8 @@
 	import { onMount } from 'svelte';
 	import hotkeys from 'hotkeys-js';
 	import Option from './Option.svelte';
-	export let options;
-	export let selectedOption;
-	export let disabled;
+
+	let { options, selectedOption = $bindable(null), disabled } = $props();
 
 	onMount(() => {
 		hotkeys.unbind('1,2,3');
@@ -17,26 +16,28 @@
 
 <ul class="options">
 	{#each options as { formInTargetLanguage, correct, fake }, i}
-		<label for={i.toString()} class:fake={fake && true}>
-			<input
-				type="radio"
-				bind:group={selectedOption}
-				value={i}
-				name={i.toString()}
-				id={i.toString()}
-				{disabled}
-			/>
-			<Option
-				{correct}
-				active={selectedOption === i}
-				inactive={selectedOption !== null && selectedOption !== i}
-				{formInTargetLanguage}
-			/>
-		</label>
+		<li>
+			<label for={i.toString()} class:fake={fake && true}>
+				<input
+					type="radio"
+					bind:group={selectedOption}
+					value={i}
+					name={i.toString()}
+					id={i.toString()}
+					{disabled}
+				/>
+				<Option
+					{correct}
+					active={selectedOption === i}
+					inactive={selectedOption !== null && selectedOption !== i}
+					{formInTargetLanguage}
+				/>
+			</label>
+		</li>
 	{/each}
 </ul>
 
-<style type="text/scss">
+<style>
 	.options {
 		list-style: none;
 		padding-top: 1.5em;

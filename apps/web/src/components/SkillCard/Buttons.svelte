@@ -2,9 +2,7 @@
 	import Button from 'components/Button.svelte';
 	import Translate from 'components/Translate.svelte';
 
-	export let practiceHref;
-	export let completed;
-	export let started;
+	let { practiceHref, completed, started } = $props();
 </script>
 
 <div class="container">

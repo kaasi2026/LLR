@@ -1,9 +1,8 @@
 <script lang="ts">
 	import ClampedText from 'components/ClampedText.svelte';
 
-	export let summary: Array<string>;
-	export let stale: boolean;
-	export let completed: boolean;
+	let { summary, stale, completed }: { summary: string[]; stale: boolean; completed: boolean } =
+		$props();
 </script>
 
 <div class:completed class:stale>

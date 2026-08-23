@@ -1,6 +1,5 @@
 <script>
-	export let value = 0.0;
-	export let max = 1.0;
+	let {value = 0.0, max = 1.0} = $props();
 </script>
 
 <progress {value} {max}>

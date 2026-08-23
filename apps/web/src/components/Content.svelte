@@ -1,5 +1,10 @@
+<!-- TODO: Is this necessary? -->
+<script lang="ts">
+	let { children } = $props();
+</script>
+
 <div class="content">
-	<slot />
+	{@render children()}
 </div>
 
 <style type="text/scss">

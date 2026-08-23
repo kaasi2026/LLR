@@ -1,8 +1,5 @@
 <script lang="ts">
-	export let size = 'medium';
-	export let prefix = 'fas';
-	export let icon: string;
-	export let left = false;
+	let { size = 'medium', prefix = 'fas', icon, left = false } = $props();
 </script>
 
 <span class={`icon is-${size}`} class:is-left={left}>

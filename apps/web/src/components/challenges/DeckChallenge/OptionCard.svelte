@@ -2,12 +2,21 @@
 	import Card from 'components/Card.svelte';
 	import Stack from 'components/Stack.svelte';
 
-	export let active: boolean;
-	export let inactive: boolean;
-	export let correct: boolean;
-	export let number: number;
-	export let picture: string;
-	export let formInTargetLanguage: string;
+	let {
+		active,
+		inactive,
+		correct,
+		number,
+		picture,
+		formInTargetLanguage
+	}: {
+		active: boolean;
+		inactive: boolean;
+		correct: boolean;
+		number: number;
+		picture: string;
+		formInTargetLanguage: string;
+	} = $props();
 </script>
 
 <li class:active class:inactive>
@@ -15,16 +24,20 @@
 		data-test={active ? 'active' : inactive ? 'inactive' : 'neutral'}
 		data-test-correct={correct}
 	>
-		<div slot="media">
-			<img src={`/images/${picture}`} alt="" data-test={`card-img-${number}`} />
-		</div>
-		<div slot="footer">
-			<Stack justify="center">
-				<div data-test={`card-text-${number}`}>
-					{formInTargetLanguage}
-				</div>
-			</Stack>
-		</div>
+		{#snippet media()}
+			<div>
+				<img src={`/images/${picture}`} alt="" data-test={`card-img-${number}`} />
+			</div>
+		{/snippet}
+		{#snippet footer()}
+			<div>
+				<Stack justify="center">
+					<div data-test={`card-text-${number}`}>
+						{formInTargetLanguage}
+					</div>
+				</Stack>
+			</div>
+		{/snippet}
 	</Card>
 </li>
 

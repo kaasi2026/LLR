@@ -1,9 +1,9 @@
 <script lang="ts">
-	export let shadow = true;
-	export let glow = false;
+	let { shadow = true, glow = false } = $props();
 
-	let imageURL =
-		shadow === true ? '/images/mascot-jetpack.svg' : '/images/mascot-jetpack-noshadow.svg';
+	let imageURL = $derived(
+		shadow === true ? '/images/mascot-jetpack.svg' : '/images/mascot-jetpack-noshadow.svg'
+	);
 </script>
 
 <img

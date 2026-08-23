@@ -1,22 +1,40 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import type { Snippet } from 'svelte';
+
+	// TODO: Check if this component is strictly necessary
 	import LinkOrButton from './primitives/LinkOrButton.svelte';
 	import Spinner from './Spinner.svelte';
 	import Stack from './Stack.svelte';
 
-	const dispatch = createEventDispatcher();
-	export let href: string | null = null;
-	export let size: 'small' | 'medium' | 'large' = 'medium';
-	export let loading = false;
-	export let asHref: string | null = null;
-	export let type: 'button' | 'submit' = 'button';
-	export let fakePseudoSelector: null | 'active' | 'hover' = null;
-	// TODO: fix secondary button style needs to have purple outline
-	export let style: 'primary' | 'secondary' | 'accent' | 'key' | 'linkButton' = 'primary';
-	export let target: string | undefined = undefined;
-	export let tabIndex: number | undefined = undefined;
-	export let ariaLabel: string | null = null;
-	export let disabled = false;
+	let {
+		href,
+		size = 'medium',
+		loading = false,
+		asHref,
+		type = 'button',
+		fakePseudoSelector,
+		style = 'primary',
+		target,
+		tabIndex,
+		ariaLabel,
+		disabled = false,
+		onclick,
+		children
+	}: {
+		href?: string | null;
+		size?: 'small' | 'medium' | 'large';
+		loading?: boolean;
+		asHref?: string | null;
+		type?: 'button' | 'submit';
+		fakePseudoSelector?: null | 'active' | 'hover';
+		style?: 'primary' | 'secondary' | 'accent' | 'key' | 'linkButton';
+		target?: string | undefined;
+		tabIndex?: number | undefined;
+		ariaLabel?: string | null;
+		disabled?: boolean;
+		onclick?: (e: MouseEvent) => void;
+		children: Snippet;
+	} = $props();
 </script>
 
 <LinkOrButton
@@ -25,7 +43,7 @@
 	data-style={style}
 	data-selector={fakePseudoSelector}
 	{href}
-	on:click={() => dispatch('click')}
+	{onclick}
 	label={ariaLabel}
 	{type}
 	{target}
@@ -36,8 +54,7 @@
 		<Spinner />
 	{:else}
 		<Stack>
-			<div slot="icon-left"></div>
-			<slot />
+			{@render children()}
 		</Stack>
 	{/if}
 </LinkOrButton>

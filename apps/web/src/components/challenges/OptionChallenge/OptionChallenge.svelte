@@ -5,29 +5,35 @@
 	import ChallengePanel from '../ChallengePanel.svelte';
 	import { prepareChallenge } from '$lib/generic';
 
-	export let currentChallenge;
-	export let alternativeChallenges;
-	export let resolveChallenge;
-	export let registerResult;
-	export let skipChallenge;
-	export let skipAllChallenges;
-
-	let selectedOption = null;
-	let submitted = false;
-
-	$: options = prepareChallenge({
+	let {
 		currentChallenge,
 		alternativeChallenges,
-		typeToSelect: 'options'
-	});
+		resolveChallenge,
+		registerResult,
+		skipChallenge,
+		skipAllChallenges
+	} = $props();
 
-	$: finishChallenge = () => {
+	let selectedOption = $state(null);
+	let submitted = $state(false);
+
+	let options = $derived(
+		prepareChallenge({
+			currentChallenge,
+			alternativeChallenges,
+			typeToSelect: 'options'
+		})
+	);
+
+	const finishChallenge = () => {
 		selectedOption = null;
 		submitted = false;
 		resolveChallenge();
 	};
 
-	$: submitChallenge = () => {
+	const submitChallenge = (e?: Event) => {
+		e?.preventDefault();
+		if (selectedOption === null) return;
 		registerResult(options[selectedOption]?.correct);
 		submitted = true;
 	};
@@ -52,7 +58,7 @@
 	?
 </p>
 
-<form on:submit|preventDefault={submitChallenge}>
+<form onsubmit={submitChallenge}>
 	<Options {options} bind:selectedOption disabled={submitted} />
 
 	{#if !submitted && selectedOption !== null}
@@ -74,7 +80,7 @@
 		/>
 	{/if}
 
-	{#if submitted}
+	{#if submitted && selectedOption !== null}
 		{#if options[selectedOption].correct}
 			<ChallengePanel
 				message="Correct solution!"

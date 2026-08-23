@@ -1,11 +1,13 @@
 <script>
 	import Backdrop from './Backdrop.svelte';
+
+	let { children } = $props();
 </script>
 
 <div class="hero">
 	<Backdrop />
 	<div class="content">
-		<slot />
+		{@render children()}	
 	</div>
 </div>
 

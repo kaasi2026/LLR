@@ -4,31 +4,38 @@
 	import OptionDeck from './OptionDeck.svelte';
 	import ChallengePanel from '../ChallengePanel.svelte';
 	import { prepareChallenge } from '$lib/generic';
+	import type { AnswerOption } from '../types';
 
-	export let currentChallenge;
-	export let alternativeChallenges;
-	export let resolveChallenge;
-	export let registerResult;
-	export let skipChallenge;
-	export let skipAllChallenges;
-
-	let selectedOption = null;
-	let submitted = false;
-
-	$: options = prepareChallenge({
+	let {
 		currentChallenge,
 		alternativeChallenges,
-		typeToSelect: 'cards',
-		hasFakeOption: true
-	});
+		resolveChallenge,
+		registerResult,
+		skipChallenge,
+		skipAllChallenges
+	} = $props();
 
-	$: finishChallenge = () => {
+	let selectedOption = $state(null);
+	let submitted = $state(false);
+
+	let options: AnswerOption[] = $derived(
+		prepareChallenge({
+			currentChallenge,
+			alternativeChallenges,
+			typeToSelect: 'cards',
+			hasFakeOption: true
+		})
+	);
+
+	const finishChallenge = () => {
 		selectedOption = null;
 		submitted = false;
 		resolveChallenge();
 	};
 
-	$: submitChallenge = () => {
+	const submitChallenge = (e?: Event) => {
+		e?.preventDefault();
+		if (selectedOption === null) return;
 		registerResult(options[selectedOption].correct);
 		submitted = true;
 	};
@@ -51,13 +58,11 @@
 	?
 </p>
 
-<form on:submit|preventDefault={submitChallenge}>
+<form onsubmit={submitChallenge}>
 	<OptionDeck {options} bind:selectedOption disabled={submitted} />
 
 	{#if selectedOption === null && !submitted}
 		<ChallengePanel
-			message={null}
-			buttonText={null}
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
 		/>
@@ -73,7 +78,7 @@
 		/>
 	{/if}
 
-	{#if submitted}
+	{#if submitted && selectedOption !== null}
 		{#if options[selectedOption].correct}
 			<ChallengePanel
 				message="Correct solution!"

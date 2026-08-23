@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	type StackAlign =
 		| 'normal'
 		| 'stretch'
@@ -42,56 +44,46 @@
 	type SpacingSize = 'none' | 'xs' | 's' | 'm' | 'l' | 'xl';
 	type StackDirection = 'row' | 'column';
 
-	export let direction: StackDirection = 'row';
-	export let directionDesktop: StackDirection | null = null;
-	export let directionTablet: StackDirection | null = null;
-	export let align: StackAlign = 'normal';
-	export let justify: StackJustify = 'normal';
-	export let spacing: SpacingSize | null = null;
-	export let shrink = 1;
-	export let fullHeight = false;
+	let {
+		direction = 'row',
+		directionDesktop = null,
+		directionTablet = null,
+		align = 'normal',
+		justify = 'normal',
+		spacing = null,
+		shrink = 1,
+		fullHeight = false,
+		children
+	}: {
+		direction?: StackDirection;
+		directionDesktop?: StackDirection | null;
+		directionTablet?: StackDirection | null;
+		align?: StackAlign;
+		justify?: StackJustify;
+		spacing?: SpacingSize | null;
+		shrink?: number;
+		fullHeight?: boolean;
+		children: Snippet;
+	} = $props();
 
-	$: compiledStyle = (() => {
-		let variables: [string, string][] = [];
-
-		if (spacing) {
-			variables.push(['spacing', `var(--spacing-${spacing})`]);
-		}
-
-		if (direction !== 'row') {
-			variables.push(['direction-mobile', direction]);
-		}
-
-		if (directionTablet) {
-			variables.push(['direction-tablet', directionTablet]);
-		}
-
-		if (directionDesktop) {
-			variables.push(['direction-desktop', directionDesktop]);
-		}
-
-		if (fullHeight) {
-			variables.push(['height', '100%']);
-		}
-
-		if (align !== 'normal') {
-			variables.push(['align', align]);
-		}
-
-		if (justify !== 'normal') {
-			variables.push(['justify', justify]);
-		}
-
-		if (shrink !== 1) {
-			variables.push(['shrink', `${shrink}`]);
-		}
-
-		return variables.map(([name, value]) => `--stack-${name}:${value}`).join(';');
-	})();
+	let compiledStyle = $derived(
+		[
+			spacing ? `--stack-spacing: var(--spacing-${spacing})` : null,
+			direction !== 'row' ? `--stack-direction-mobile: ${direction}` : null,
+			directionTablet ? `--stack-direction-tablet: ${directionTablet}` : null,
+			directionDesktop ? `--stack-direction-desktop: ${directionDesktop}` : null,
+			fullHeight ? `--stack-height: 100%` : null,
+			align !== 'normal' ? `--stack-align: ${align}` : null,
+			justify !== 'normal' ? `--stack-justify: ${justify}` : null,
+			shrink !== 1 ? `--stack-shrink: ${shrink}` : null
+		]
+			.filter(Boolean)
+			.join(';')
+	);
 </script>
 
 <div style={compiledStyle}>
-	<slot />
+	{@render children()}
 </div>
 
 <style>

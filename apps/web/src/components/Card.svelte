@@ -1,34 +1,51 @@
-<script>
-	export let backgroundColor = 'white';
-	export let foregroundColor = 'black';
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	type Props = {
+		backgroundColor?: string;
+		foregroundColor?: string;
+		media?: Snippet;
+		content?: Snippet;
+		footer?: Snippet;
+		icon?: Snippet;
+	} & Record<string, any>;
+
+	let {
+		backgroundColor = 'white',
+		foregroundColor = 'black',
+		media,
+		content,
+		footer,
+		icon,
+		...restProps
+	}: Props = $props();
 </script>
 
 <div
-	{...$$restProps}
 	class="lluis-card"
 	style="--backgroundColor: {backgroundColor}; --foregroundColor: {foregroundColor};"
+	{...restProps}
 >
-	{#if $$slots.media}
+	{#if media}
 		<div class="lluis-card-media">
-			<slot name="media" />
+			{@render media()}
 		</div>
 	{/if}
 
-	{#if $$slots.content}
+	{#if content}
 		<div class="lluis-card-content">
-			<slot name="content" />
+			{@render content()}
 		</div>
 	{/if}
 
-	{#if $$slots.footer}
+	{#if footer}
 		<div class="lluis-card-footer">
-			<slot name="footer" />
+			{@render footer()}
 		</div>
 	{/if}
 
-	{#if $$slots.footer}
+	{#if icon}
 		<div class="corner-icon">
-			<slot name="icon" />
+			{@render icon()}
 		</div>
 	{/if}
 </div>

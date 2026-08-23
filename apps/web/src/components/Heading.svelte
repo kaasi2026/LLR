@@ -1,17 +1,21 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	// TODO: There's a very handy element named `<h1>` that does *exactly* the same thing
 	type HeadingLevel = 1 | 2;
-	export let level: HeadingLevel;
+
+	let { level, children }: { level: HeadingLevel; children: Snippet } = $props();
 </script>
 
 {#if level == 1}
 	<h1>
-		<slot />
+		{@render children()}
 	</h1>
 {/if}
 
 {#if level == 2}
 	<h2>
-		<slot />
+		{@render children()}
 	</h2>
 {/if}
 

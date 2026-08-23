@@ -1,35 +1,45 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-	const dispatch = createEventDispatcher();
-	export let href: string | null = null;
-	export let type: 'button' | 'submit' = 'button';
-	export let target: string | undefined = undefined;
-	export let tabIndex: number | undefined = undefined;
-	export let disabled = false;
-	export let label: string | null = null;
+	type Props = {
+		href?: string | null;
+		type?: 'button' | 'submit';
+		target?: string | undefined;
+		tabIndex?: number | undefined;
+		disabled?: boolean;
+		label?: string | null;
+		onclick?: (e: MouseEvent) => void;
+		children: Snippet;
+	} & Record<string, any>
+
+	// TODO: Check if this component is strictly necessary
+	let {
+		href = null,
+		type = 'button',
+		target,
+		tabIndex,
+		disabled = false,
+		label,
+		onclick,
+		children,
+		...restProps
+	}: Props = $props();
 </script>
 
 {#if href !== null}
-	<a {href} {target} tabindex={tabIndex} {...$$restProps} role="button" aria-label={label}>
-		<slot />
+	<a {href} {target} tabindex={tabIndex} {...restProps} role="button" aria-label={label}>
+		{@render children()}
 	</a>
 {/if}
 
 {#if href === null}
-	<button
-		{type}
-		tabindex={tabIndex}
-		{disabled}
-		on:click={() => dispatch('click')}
-		aria-label={label}
-		{...$$restProps}
-	>
-		<slot />
+	<button {type} tabindex={tabIndex} {disabled} {onclick} aria-label={label} {...restProps}>
+		{@render children()}
 	</button>
 {/if}
 
-<style type="text/scss">
+<style>
 	button {
 		background: transparent;
 		border: 0;

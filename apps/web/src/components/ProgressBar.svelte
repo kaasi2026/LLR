@@ -1,15 +1,14 @@
 <script lang="ts">
 	import Progress from './Progress.svelte';
-	import { tweened } from 'svelte/motion';
+	import { Tween } from 'svelte/motion';
 
-	export let value;
+	let { value = 0 } = $props();
 
-	const progress = tweened(0);
-	$: progress.set(value);
+	const progress = Tween.of(() => value);
 </script>
 
 <div>
-	<Progress value={$progress} />
+	<Progress value={progress.current} />
 </div>
 
 <style type="text/scss">

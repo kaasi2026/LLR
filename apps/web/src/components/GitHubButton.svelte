@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: Dead code, remove this
 	import { onMount } from 'svelte';
 	import isBrowser from '../utils/isBrowser';
 	import Icon from 'lluis/Icon.svelte';

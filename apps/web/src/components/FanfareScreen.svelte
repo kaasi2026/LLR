@@ -12,9 +12,7 @@
 	import Columns from 'components/Columns.svelte';
 	import Title from 'components/Title.svelte';
 
-	export let courseURL;
-	export let skillId;
-	export let stats;
+	let { skillId, courseURL, stats } = $props();
 
 	onMount(async () => {
 		sound.fanfare.play();

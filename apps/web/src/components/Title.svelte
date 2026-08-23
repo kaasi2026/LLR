@@ -1,15 +1,30 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import type { SizeType } from 'types/types';
 
-	export let sizeMobile: null | SizeType = null;
-	export let sizeTablet: null | SizeType = null;
-	export let sizeDesktop: null | SizeType = null;
-	export let isSubtitle = false;
-	export let isSpaced = false;
-	export let size = isSubtitle ? 5 : 3;
-	export let textWeight: null | 'semibold' = null;
-	export let align: null | 'centered' = null;
-	export let multiline = false;
+	let {
+		sizeMobile = null,
+		sizeTablet = null,
+		sizeDesktop = null,
+		isSubtitle = false,
+		isSpaced = false,
+		size = isSubtitle ? 5 : 3,
+		textWeight = null,
+		align = null,
+		multiline = false,
+		children
+	}: {
+		sizeMobile?: null | SizeType;
+		sizeTablet?: null | SizeType;
+		sizeDesktop?: null | SizeType;
+		isSubtitle?: boolean;
+		isSpaced?: boolean;
+		size?: number;
+		textWeight?: null | 'semibold';
+		align?: null | 'centered';
+		multiline?: boolean;
+		children: Snippet;
+	} = $props();
 </script>
 
 <h1
@@ -24,7 +39,7 @@
   ${align ? `has-text-${align}` : ''}`}
 	class:is-spaced={isSpaced}
 >
-	<slot />
+	{@render children()}
 </h1>
 
 <style type="text/scss">

@@ -10,21 +10,24 @@
 	import Column from 'components/Column.svelte';
 	import Columns from 'components/Columns.svelte';
 
-	export let challenge;
-	export let registerResult;
-	export let resolveChallenge;
-	export let languageCode;
-	export let specialCharacters;
-	export let skipChallenge;
-	export let skipAllChallenges;
-	export let skipAllVoice;
+	let {
+		challenge,
+		registerResult,
+		resolveChallenge,
+		languageCode,
+		specialCharacters,
+		skipChallenge,
+		skipAllChallenges,
+		skipAllVoice
+	} = $props();
 
-	let answer = '';
-	let submitted = false;
-	let correct = null;
-	let spellingSuggestion = '';
+	let answer: string | null = $state('');
+	let submitted = $state(false);
+	let correct: boolean | null = $state(null);
+	let spellingSuggestion = $state('');
 
-	$: submitChallenge = () => {
+	const submitChallenge = (e?: Event) => {
+		e?.preventDefault();
 		if (!answer) return;
 		if (submitted) return;
 		const form = challenge.answer;
@@ -53,7 +56,7 @@
 		submitted = true;
 	};
 
-	$: finishChallenge = () => {
+	const finishChallenge = () => {
 		answer = null;
 		submitted = false;
 		resolveChallenge();
@@ -74,14 +77,14 @@
 	});
 </script>
 
-<form on:submit|preventDefault={submitChallenge}>
+<form onsubmit={submitChallenge}>
 	<div class="section">
 		<p class="is-size-1 is-size-2-tablet is-size-4-mobile has-text-centered">Type what you hear</p>
 	</div>
 
 	<Columns>
 		<Column size="1">
-			<Button size="large" style="primary" on:click={playChallengeVoice}>
+			<Button size="large" style="primary" onclick={playChallengeVoice}>
 				<Icon icon="volume-up" />
 			</Button>
 		</Column>
@@ -108,8 +111,6 @@
 
 	{#if answer === '' && !submitted}
 		<ChallengePanel
-			message={null}
-			buttonText={null}
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
 			{skipAllVoice}

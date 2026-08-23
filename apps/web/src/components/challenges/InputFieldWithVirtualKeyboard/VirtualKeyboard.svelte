@@ -1,27 +1,36 @@
 <script lang="ts">
-	// Manual test: http://localhost:3000/course/test-1/skill/short-input-test-3?testChallenge=86665e4f61fa
 	import Button from 'components/Button.svelte';
 	import HorizontalScroller from 'components/HorizontalScroller.svelte';
+	import type { Snippet } from 'svelte';
 
-	export let characters: Array<string>;
-	export let handleVirtualKey;
+	let {
+		characters,
+		handleVirtualKey,
+		children
+	}: {
+		characters: string[];
+		handleVirtualKey: (character: string) => () => void;
+		children?: Snippet;
+	} = $props();
 </script>
 
 <div class="virtual-keyboard">
 	<HorizontalScroller>
-		<slot>
+		{#if children}
+			{@render children()}
+		{:else}
 			<div class="keys">
 				{#each characters as character}
-					<Button style="key" tabIndex={-1} size="small" on:click={handleVirtualKey(character)}>
+					<Button style="key" tabIndex={-1} size="small" onclick={handleVirtualKey(character)}>
 						{character}
 					</Button>
 				{/each}
 			</div>
-		</slot>
+		{/if}
 	</HorizontalScroller>
 </div>
 
-<style type="text/scss">
+<style>
 	.virtual-keyboard {
 		display: flex;
 		flex-wrap: wrap;

@@ -18,22 +18,25 @@
 		return result;
 	}
 
-	export let challenge;
-	export let registerResult;
-	export let resolveChallenge;
-	export let languageName;
-	export let languageCode;
-	export let specialCharacters;
-	export let skipChallenge;
-	export let skipAllChallenges;
+	let {
+		challenge,
+		registerResult,
+		resolveChallenge,
+		languageName,
+		languageCode,
+		specialCharacters,
+		skipChallenge,
+		skipAllChallenges
+	} = $props();
 
-	let answer = '';
-	let submitted = false;
-	let correct = null;
-	let spellingSuggestion = '';
-	let picture = shuffle(challenge.pictures)[0];
+	let answer: string | null = $state('');
+	let submitted = $state(false);
+	let correct: boolean | null = $state(null);
+	let spellingSuggestion = $state('');
+	let picture = $derived(shuffle(challenge.pictures)[0]);
 
-	$: submitChallenge = () => {
+	const submitChallenge = (e?: Event) => {
+		e?.preventDefault();
 		if (!answer) return;
 		if (submitted) return;
 
@@ -49,7 +52,7 @@
 		submitted = true;
 	};
 
-	$: finishChallenge = () => {
+	const finishChallenge = () => {
 		answer = null;
 		submitted = false;
 		resolveChallenge();
@@ -67,7 +70,7 @@
 	});
 </script>
 
-<form on:submit|preventDefault={submitChallenge}>
+<form onsubmit={submitChallenge}>
 	<div class="section">
 		<p class="is-size-1 is-size-2-tablet is-size-4-mobile has-text-centered">
 			Type
@@ -113,8 +116,6 @@
 
 	{#if answer === '' && !submitted}
 		<ChallengePanel
-			message={null}
-			buttonText={null}
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
 		/>
@@ -154,7 +155,7 @@
 	{/if}
 </form>
 
-<style type="text/scss">
+<style>
 	.card {
 		max-width: 16em;
 		margin: auto;

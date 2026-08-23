@@ -3,13 +3,7 @@
 	import Title from 'components/Title.svelte';
 	import Progress from 'components/Progress.svelte';
 
-	export let title;
-	export let completed;
-	export let started;
-	export let summary;
-	export let progress;
-	export let levels;
-	export let stale;
+	let { title, completed, started, summary, progress, levels, stale } = $props();
 </script>
 
 <div class="media-content" class:completed class:stale>

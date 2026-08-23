@@ -29,7 +29,7 @@
 </svelte:head>
 
 <main class="course-page app-page">
-	<NavBar hasAuth {repositoryURL} />
+	<NavBar {repositoryURL} />
 
 	{#each modules as { title, skills } (title)}
 		<section class="section surface-card surface-block">

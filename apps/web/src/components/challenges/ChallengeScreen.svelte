@@ -8,10 +8,7 @@
 	import FanfareScreen from '../FanfareScreen.svelte';
 	import ProgressBar from '../ProgressBar.svelte';
 	import { fade, scale } from 'svelte/transition';
-	// TODO: deal with this ignore comment
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	//import db from '../db/db';
-	import isBrowser from 'utils/isBrowser';
+	import { browser } from '$app/environment';
 
 	// TODO: remove this
 	function shuffle<T>(array: T[]): T[] {
@@ -23,72 +20,67 @@
 		return result;
 	}
 
-	export let rawChallenges;
-	export let languageName;
-	export let languageCode;
-	export let specialCharacters;
-	export let sortChallengeGroups;
-	export let courseURL;
-	export let skillId;
-	export let expectedNumberOfChallenges;
+	let {
+		rawChallenges,
+		languageName,
+		languageCode,
+		specialCharacters,
+		sortChallengeGroups,
+		courseURL,
+		skillId,
+		expectedNumberOfChallenges
+	} = $props();
 
-	const testChallenge =
-		isBrowser() && new URLSearchParams(window.location.search).get('testChallenge');
+	const testChallenge = browser && new URLSearchParams(window.location.search).get('testChallenge');
 
-	type CardChallengeType = {
+	type CardChallengeData = {
 		id: string;
 		type: 'cards';
 		pictures: Array<string>;
 	};
 
-	type ListeningChallengeType = {
+	type ListeningChallengeData = {
 		id: string;
 		type: 'listeningExercise';
 	};
 
-	type OptionsChallengeType = {
+	type OptionsChallengeData = {
 		id: string;
 		type: 'options';
 	};
 
-	type ShortInputChallengeType = {
+	type ShortInputChallengeData = {
 		id: string;
 		type: 'shortInput';
 	};
 
-	type ChipsChallengeType = {
+	type ChipsChallengeData = {
 		id: string;
 		type: 'chips';
 	};
 
-	type ChallengeType =
-		| CardChallengeType
-		| ListeningChallengeType
-		| OptionsChallengeType
-		| ShortInputChallengeType
-		| ChipsChallengeType;
+	type ChallengeData =
+		| CardChallengeData
+		| ListeningChallengeData
+		| OptionsChallengeData
+		| ShortInputChallengeData
+		| ChipsChallengeData;
 
-	let challenges: Array<ChallengeType> = sortChallengeGroups(
+	let rawchallenges: ChallengeData[] = sortChallengeGroups(
 		shuffle(rawChallenges),
 		expectedNumberOfChallenges
 	);
+	let challengeCount = rawchallenges.length;
 
-	let remainingChallenges = testChallenge
-		? [
-				...[...challenges].filter((challenge) => challenge.id === testChallenge),
-				...[...challenges].filter((challenge) => challenge.id !== testChallenge)
-			]
-		: [...challenges];
+	let challenges: ChallengeData[] = $state([...rawchallenges]);
+	let currentChallenge = $state(challenges.shift());
+	let solvedChallenges: ChallengeData[] = $state([]);
 
-	let currentChallenge = remainingChallenges.shift();
-	let solvedChallenges = [];
-
-	let progress = 0;
-	let stats = {
+	let stats: { correct: number; incorrect: number; skipped: number } = $state({
 		correct: 0,
 		incorrect: 0,
 		skipped: 0
-	};
+	});
 
 	const preloadImage = (imageName: string) => {
 		if (typeof Image === 'undefined') return;
@@ -97,47 +89,49 @@
 
 	challenges && challenges.map((c: any) => c.pictures && c.pictures.map(preloadImage));
 
-	$: alternativeChallenges =
-		currentChallenge && rawChallenges.filter(({ id }) => id !== currentChallenge.id);
+	let alternativeChallenges = $derived(
+		currentChallenge &&
+			rawChallenges.filter(({ id }: { id: string }) => id !== currentChallenge?.id)
+	);
 
-	$: registerResult = (isCorrect: boolean) => {
-		if (isCorrect) {
-			stats.correct++;
-			sound.correct.play();
-			solvedChallenges.push(currentChallenge);
-		} else {
-			stats.incorrect++;
-			sound.wrong.play();
-			remainingChallenges.push(currentChallenge);
+	const registerResult = (isCorrect: boolean) => {
+		if (currentChallenge) {
+			if (isCorrect) {
+				stats.correct++;
+				sound.correct.play();
+				solvedChallenges.push(currentChallenge);
+			} else {
+				stats.incorrect++;
+				sound.wrong.play();
+				challenges.push(currentChallenge);
+			}
 		}
 	};
 
-	$: progress = (solvedChallenges.length + stats.skipped) / challenges.length;
+	let progress = $derived((solvedChallenges.length + stats.skipped) / challengeCount);
 
-	$: resolveChallenge = () => {
-		if (remainingChallenges) {
-			currentChallenge = remainingChallenges.shift();
-		}
+	const resolveChallenge = () => {
+		currentChallenge = challenges.shift();
 	};
 
-	$: skipChallenge = () => {
+	const skipChallenge = () => {
 		stats.skipped++;
 		resolveChallenge();
 	};
 
-	$: skipAllChallenges = async () => {
+	const skipAllChallenges = async () => {
 		if (solvedChallenges.length == 0) {
 			window.location.replace(courseURL);
 			return;
 		}
 		stats.skipped++;
-		remainingChallenges.forEach(() => stats.skipped++);
-		remainingChallenges = [];
+		challenges.forEach(() => stats.skipped++);
+		challenges = [];
 		currentChallenge = undefined;
 	};
 
-	$: skipAllVoice = () => {
-		let filteredRemainingChallenges = remainingChallenges.filter((challenge) => {
+	const skipAllVoice = () => {
+		let filteredRemainingChallenges = challenges.filter((challenge) => {
 			if (challenge.type === 'listeningExercise') {
 				stats.skipped++;
 				return false;
@@ -146,7 +140,7 @@
 			}
 		});
 
-		remainingChallenges.splice(0, remainingChallenges.length, ...filteredRemainingChallenges);
+		challenges.splice(0, challenges.length, ...filteredRemainingChallenges);
 		stats.skipped++;
 		resolveChallenge();
 	};
@@ -156,80 +150,74 @@
 	<div class="container" in:scale>
 		<section class="section">
 			<ProgressBar value={progress} />
-			{#each challenges as challenge, i (challenge.id)}
-				{#if challenge.id === currentChallenge.id}
-					<div
-						class="challenge"
-						in:fade|local={{ duration: 300, delay: 350 }}
-						out:fade|local={{ duration: 300 }}
-					>
-						{#if challenge.type === 'cards'}
-							<DeckChallenge
-								{skipChallenge}
-								{currentChallenge}
-								{alternativeChallenges}
-								{resolveChallenge}
-								{registerResult}
-								{skipAllChallenges}
-							/>
-						{/if}
-						{#if challenge.type === 'options'}
-							<OptionChallenge
-								{skipChallenge}
-								{currentChallenge}
-								{alternativeChallenges}
-								{resolveChallenge}
-								{registerResult}
-								{skipAllChallenges}
-							/>
-						{/if}
-						{#if challenge.type === 'shortInput'}
-							<ShortInputChallenge
-								{skipChallenge}
-								{languageName}
-								{languageCode}
-								{specialCharacters}
-								{registerResult}
-								{resolveChallenge}
-								{challenge}
-								{skipAllChallenges}
-							/>
-						{/if}
-						{#if challenge.type === 'listeningExercise'}
-							<ListeningChallenge
-								{skipChallenge}
-								{languageCode}
-								{specialCharacters}
-								{registerResult}
-								{resolveChallenge}
-								{challenge}
-								{skipAllChallenges}
-								{skipAllVoice}
-							/>
-						{/if}
-						{#if challenge.type === 'chips'}
-							<ChipsChallenge
-								{registerResult}
-								{resolveChallenge}
-								{challenge}
-								{skipChallenge}
-								{skipAllChallenges}
-							/>
-						{/if}
-					</div>
-				{/if}
-			{/each}
+			{#key currentChallenge.id}
+				<div class="challenge" in:fade={{ duration: 300, delay: 350 }} out:fade={{ duration: 300 }}>
+					{#if currentChallenge.type === 'cards'}
+						<DeckChallenge
+							{skipChallenge}
+							{currentChallenge}
+							{alternativeChallenges}
+							{resolveChallenge}
+							{registerResult}
+							{skipAllChallenges}
+						/>
+					{/if}
+					{#if currentChallenge.type === 'options'}
+						<OptionChallenge
+							{skipChallenge}
+							{currentChallenge}
+							{alternativeChallenges}
+							{resolveChallenge}
+							{registerResult}
+							{skipAllChallenges}
+						/>
+					{/if}
+					{#if currentChallenge.type === 'shortInput'}
+						<ShortInputChallenge
+							{skipChallenge}
+							{languageName}
+							{languageCode}
+							{specialCharacters}
+							{registerResult}
+							{resolveChallenge}
+							challenge={currentChallenge}
+							{skipAllChallenges}
+						/>
+					{/if}
+					{#if currentChallenge.type === 'listeningExercise'}
+						<ListeningChallenge
+							{skipChallenge}
+							{languageCode}
+							{specialCharacters}
+							{registerResult}
+							{resolveChallenge}
+							challenge={currentChallenge}
+							{skipAllChallenges}
+							{skipAllVoice}
+						/>
+					{/if}
+					{#if currentChallenge.type === 'chips'}
+						<ChipsChallenge
+							{registerResult}
+							{resolveChallenge}
+							challenge={currentChallenge}
+							{skipChallenge}
+							{skipAllChallenges}
+						/>
+					{/if}
+				</div>
+			{/key}
 		</section>
 	</div>
 {/if}
 
-{#if !currentChallenge}
+{#if currentChallenge === undefined}
 	<div class="container">
 		<FanfareScreen {courseURL} {skillId} {stats} />
 	</div>
 {/if}
 
-<style type="text/scss">
+<style>
 	.section {
 		padding: 1.5em;
 	}

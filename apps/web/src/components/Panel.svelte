@@ -1,15 +1,24 @@
 <script lang="ts">
-	export let background: 'default' | 'success' | 'failure' | 'info' = 'default';
+	import type { Snippet } from 'svelte';
+	let {
+		background = 'default',
+		left,
+		right
+	}: {
+		background: 'default' | 'success' | 'failure' | 'info';
+		left: Snippet;
+		right: Snippet;
+	} = $props();
 </script>
 
 <div class="panel" data-background={background}>
 	<div class="content">
-		<slot name="left" />
-		<slot name="right" />
+		<div class="left">{@render left()}</div>
+		<div class="right">{@render right()}</div>
 	</div>
 </div>
 
-<style type="text/scss">
+<style>
 	.panel {
 		position: fixed;
 		display: block;
@@ -42,11 +51,11 @@
 			max-width: 960px;
 			margin: auto;
 
-			:global([slot='left']) {
+			.left {
 				flex-grow: 1;
 			}
 
-			:global([slot='right']) {
+			.right {
 				flex-grow: 0;
 			}
 		}
