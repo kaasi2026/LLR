@@ -66,6 +66,9 @@
 
 	onMount(() => {
 		playChallengeVoice();
+		// Enable key capture inside text inputs
+		hotkeys.filter = () => true;
+
 		hotkeys.unbind('enter');
 		hotkeys('enter', () => {
 			if (submitted) {
@@ -77,7 +80,7 @@
 	});
 </script>
 
-<form onsubmit={submitChallenge}>
+<form onsubmit={(e) => e.preventDefault()}>
 	<div class="section">
 		<p class="is-size-1 is-size-2-tablet is-size-4-mobile has-text-centered">Type what you hear</p>
 	</div>
@@ -102,7 +105,7 @@
 		<ChallengePanel
 			message=""
 			buttonText="Submit"
-			submit
+			buttonAction={submitChallenge}
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
 			{skipAllVoice}
@@ -110,11 +113,7 @@
 	{/if}
 
 	{#if answer === '' && !submitted}
-		<ChallengePanel
-			skipAction={skipChallenge}
-			skipAllAction={skipAllChallenges}
-			{skipAllVoice}
-		/>
+		<ChallengePanel skipAction={skipChallenge} skipAllAction={skipAllChallenges} {skipAllVoice} />
 	{/if}
 
 	{#if submitted}

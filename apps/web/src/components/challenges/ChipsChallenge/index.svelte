@@ -142,7 +142,7 @@
 	});
 </script>
 
-<form onsubmit={submitChallenge}>
+<form onsubmit={(e) => e.preventDefault()}>
 	<div class="section">
 		<p class="is-size-1 is-size-2-tablet is-size-4-mobile has-text-centered">
 			Translate
@@ -184,7 +184,7 @@
 		<ChallengePanel
 			message=""
 			buttonText="Submit"
-			submit
+			buttonAction={submitChallenge}
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
 		/>

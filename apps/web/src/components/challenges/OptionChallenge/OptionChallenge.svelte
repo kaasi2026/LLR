@@ -58,16 +58,16 @@
 	?
 </p>
 
-<form onsubmit={submitChallenge}>
+<form onsubmit={(e) => e.preventDefault()}>
 	<Options {options} bind:selectedOption disabled={submitted} />
 
 	{#if !submitted && selectedOption !== null}
 		<ChallengePanel
 			message=""
 			buttonText="Submit"
-			submit
 			skipAction={skipChallenge}
 			skipAllAction={skipAllChallenges}
+			buttonAction={submitChallenge}
 		/>
 	{/if}
 
