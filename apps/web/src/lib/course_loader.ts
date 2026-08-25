@@ -142,7 +142,7 @@ export async function loadCourse(baseUrl: string): Promise<Course> {
 		repositoryUrl: courseYaml.Course.Repository,
 		specialCharacters: courseYaml.Course['Special characters'],
 		modules: await Promise.all(modules),
-		audioSettings: courseYaml.Settings.Audio && {
+		audioSettings: courseYaml.Settings?.Audio && {
 			enabled: courseYaml.Settings.Audio.Enabled,
 			ttsProvider: courseYaml.Settings.Audio.TTS
 		}

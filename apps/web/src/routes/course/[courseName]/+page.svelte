@@ -40,7 +40,7 @@
 					<!-- Description removed per design request -->
 				</div>
 				<Columns multiline class="surface-grid">
-					{#each skills as skill (skill?.id)}
+					{#each skills.filter(Boolean) as skill (skill.id)}
 						{#if skill}
 							<Column sizeDesktop="1/3" sizeTablet="1/2">
 								<SkillCard
