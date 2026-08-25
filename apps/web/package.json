@@ -23,17 +23,17 @@
 		"fetchAudios": "bash ./scripts/fetchAudios.sh"
 	},
 	"devDependencies": {
-		"@types/howler": "^2.2.12",
-		"@types/js-cookie": "^3.0.6",
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@types/howler": "^2.2.12",
+		"@types/js-cookie": "^3.0.6",
 		"@types/node": "^22.10.7",
 		"@types/showdown": "^2.0.6",
-		"svelte-check": "^4.6.0",
 		"@types/sortablejs": "^1.15.8",
 		"sass": "^1.83.4",
 		"svelte": "^5.0.0",
+		"svelte-check": "^4.6.0",
 		"vite-plugin-markdown": "^2.2.0"
 	},
 	"dependencies": {
@@ -47,6 +47,7 @@
 		"leven": "^4.0.0",
 		"showdown": "^2.1.0",
 		"sortablejs": "^1.15.6",
-		"svelte-i18n": "^4.0.1"
+		"svelte-i18n": "^4.0.1",
+		"yaml": "^2.9.0"
 	}
 }

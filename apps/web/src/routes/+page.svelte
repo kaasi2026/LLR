@@ -11,8 +11,9 @@
 	import Heading from 'components/Heading.svelte';
 
 	import { page } from '$app/state';
+	import type { Course } from '$lib/course_index';
 
-	let coursesFs = page.data.coursesFs;
+	let coursesFs: Course[] = page.data.coursesFs;
 </script>
 
 <svelte:head>
@@ -41,12 +42,10 @@
 					<!-- For each courses available locally.. -->
 					{#if coursesFs}
 						<h3 style="text-align:center">Courses available locally</h3>
-						{#each coursesFs as course (course.path)}
+						{#each coursesFs as course (course.url)}
 							<Stack justify="center">
-								<Button style="primary" size="large" href="course/{course.path}">
-									<Translate key="index.start_{course.language}_course"
-										>Start learning {course.language}</Translate
-									>
+								<Button style="primary" size="large" href="course/{course.name}">
+									Start learning {course.target}
 								</Button>
 							</Stack>
 						{/each}

@@ -24,7 +24,7 @@
 		practiceHref: string;
 		introduction: string;
 		imageSet: string[];
-		summary: string;
+		summary: string[];
 	} = $props();
 
 	let completed: boolean = $state(false);

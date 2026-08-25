@@ -1,6 +1,6 @@
 [
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-ES-from-EN/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-ES-from-EN/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-ES-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-ES-from-EN-main",
@@ -121,7 +121,7 @@
 		"description": "Bangla for English speakers"
 	},
 	{
-		"url": "https://codeberg.org/kate/LibreLingo_FR_from_EN/archive/master.zip",
+		"url": "https://codeberg.org/kate/LibreLingo_FR_from_EN/raw/branch/master/course",
 		"repositoryURL": "https://codeberg.org/kate/LibreLingo_FR_from_EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-FR-from-EN",

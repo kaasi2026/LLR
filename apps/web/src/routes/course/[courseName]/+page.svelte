@@ -7,15 +7,16 @@
 	import Columns from 'components/Columns.svelte';
 	import Content from 'components/Content.svelte';
 	import Footer from 'components/Footer.svelte';
+	import type { Course } from '$lib/course_loader';
 
-	let { data } = $props();
+	let { data }: { data: { course: Course; courseName: string } } = $props();
 
 	let course = $derived(data.course);
-	let courseName = $derived(course?.courseName);
-	let modules = $derived(course?.modules ?? []);
-	let languageName = $derived(course?.languageName);
-	let repositoryURL = $derived(course?.repositoryURL);
-	let uiLanguage = $derived(data.uiLanguage ?? 'es');
+	// let courseName = $derived(course?.courseName);
+	// let modules = $derived(course?.modules ?? []);
+	// let languageName = $derived(course?.languageName);
+	// let repositoryURL = $derived(course?.repositoryURL);
+	let uiLanguage = $derived(course.sourceLanguage.code);
 
 	$effect(() => {
 		if (uiLanguage) {
@@ -25,26 +26,23 @@
 </script>
 
 <svelte:head>
-	<title>LibreLingo - learn {languageName} for free</title>
+	<title>LibreLingo - learn {course.language.name ?? 'a language'} for free</title>
 </svelte:head>
 
 <main class="course-page app-page">
-	<NavBar {repositoryURL} />
+	<NavBar repositoryURL={course.repositoryUrl} />
 
-	{#each modules as { title, skills } (title)}
+	{#each course.modules as { name, skills } (name)}
 		<section class="section surface-card surface-block">
 			<div class="container surface-container">
 				<div class="surface-section-heading">
-					<h2 class="is-size-2">{title}</h2>
+					<h2 class="is-size-2">{name}</h2>
 					<!-- Description removed per design request -->
 				</div>
 				<Columns multiline class="surface-grid">
 					{#each skills as skill (skill.id)}
 						<Column sizeDesktop="1/3" sizeTablet="1/2">
-							<SkillCard
-								{...skill}
-								practiceHref={`/course/${courseName}/skill/${skill.practiceHref}`}
-							/>
+							<SkillCard {...skill} practiceHref={`/course/${data.courseName}/skill/${skill.id}`} />
 						</Column>
 					{/each}
 				</Columns>
@@ -68,7 +66,7 @@
 	</Footer>
 </main>
 
-<style lang="scss">
+<style>
 	:global(.surface-grid) {
 		display: flex !important;
 		flex-wrap: wrap;

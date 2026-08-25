@@ -1,9 +1,10 @@
-<script lang="typescript">
+<script lang="ts">
 	import Stack from './Stack.svelte';
 	import Translate from './Translate.svelte';
 	import LicenseLogo from './LicenseLogo.svelte';
+	import type { Snippet } from 'svelte';
 
-	let { children } = $props();
+	let { children }: { children?: Snippet } = $props();
 </script>
 
 <div class="main-footer">
