@@ -45,7 +45,7 @@
 							<Column sizeDesktop="1/3" sizeTablet="1/2">
 								<SkillCard
 									{...skill}
-									practiceHref={`/course/${data.courseName}/skill/${skill.id}`}
+									practiceHref={`/course/${data.courseName}/skill/${skill.fullName}`}
 								/>
 							</Column>
 						{/if}

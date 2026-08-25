@@ -20,7 +20,7 @@
 	}: {
 		name: string;
 		practiceHref: string;
-		introduction: string;
+		introduction?: string;
 		imageSet: string[];
 		summary: string[];
 	} = $props();

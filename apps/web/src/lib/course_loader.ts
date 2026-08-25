@@ -17,13 +17,17 @@ export type Module = {
 
 export type Skill = {
 	name: string;
-	// ID is no longer an arbitrary number, but rather the filename minus the .yaml
-	id: string;
+	// Full name is the filename minus the .yaml
+	// Used in skill name routes, and in the introduction *.md files
+	fullName: string;
+	id: number;
 	newWords: Word[];
 	phrases: Phrase[];
 	dictionary: Dictionary[];
 	// The list of new words and phrases inside the skill
 	summary: string[];
+	introduction?: string;
+	imageSet: string[];
 };
 
 export type Word = {
@@ -39,6 +43,69 @@ export type Phrase = {
 
 export type Dictionary = Record<string, any>;
 
+async function loadSkill(baseUrl: string, moduleName: string, skillName: string) {
+	try {
+		let resp = await fetch(`${baseUrl}/${moduleName}/skills/${skillName}.yaml`);
+
+		if (!resp.ok) {
+			throw new Error(
+				`Failed to load skill ${skillName} from module ${moduleName}: got ${resp.status}`
+			);
+		}
+		let text = await resp.text();
+		let skillYaml = parse(text);
+
+		// Try to load the introduction file
+		let introduction;
+		try {
+			let resp = await fetch(`${baseUrl}/${moduleName}/skills/${skillName}.md`);
+			if (resp.ok) {
+				let text = await resp.text();
+				// TODO: Sanitize the markdown
+				introduction = text;
+			}
+		} catch {}
+
+		let newWords: Word[] = skillYaml['New words'].map(
+			(word: { Word: string; Translation: string; Images: string[] }) => {
+				return {
+					word: word.Word,
+					translation: word.Translation,
+					images: word.Images
+				};
+			}
+		);
+
+		let phrases: Phrase[] = skillYaml.Phrases.map(
+			(phrase: { Phrase: string; Translation: string }) => {
+				return {
+					phrase: phrase.Phrase,
+					translation: phrase.Translation
+				};
+			}
+		);
+		let summary = [
+			...newWords.map((word) => word.translation),
+			...phrases.map((phrase) => phrase.translation)
+		];
+
+		return {
+			name: skillYaml.Skill.Name,
+			fullName: skillName,
+			id: skillYaml.Skill.Id,
+			introduction,
+			newWords,
+			phrases,
+			dictionary: skillYaml['Mini-dictionary'],
+			summary,
+			imageSet: skillYaml.Skill.Thumbnails
+		};
+	} catch (e) {
+		console.error(`Failed to load skill ${skillName} from module ${moduleName}: ${e}`);
+		return null;
+	}
+}
+
 export async function loadCourse(baseUrl: string): Promise<Course> {
 	const resp = await fetch(`${baseUrl}/course.yaml`);
 	const text = await resp.text();
@@ -49,37 +116,10 @@ export async function loadCourse(baseUrl: string): Promise<Course> {
 		let resp = await fetch(`${baseUrl}/${moduleName}/module.yaml`);
 		let text = await resp.text();
 		let moduleYaml = parse(text);
-		let skills = moduleYaml.Skills.map(async (fileName: string) => {
-			try {
-				let resp = await fetch(`${baseUrl}/${moduleName}/skills/${fileName}`);
-				let text = await resp.text();
-				let skillYaml = parse(text);
-				return {
-					name: skillYaml.Skill.Name,
-					id: fileName.replace('.yaml', ''),
-					newWords: skillYaml['New words'].map(
-						(word: { Word: string; Translation: string; Images: string[] }) => {
-							return {
-								word: word.Word,
-								translation: word.Translation,
-								images: word.Images
-							};
-						}
-					),
-					phrases: skillYaml.Phrases.map((phrase: { Phrase: string; Translation: string }) => {
-						return {
-							phrase: phrase.Phrase,
-							translation: phrase.Translation
-						};
-					}),
-					dictionary: skillYaml['Mini-dictionary'],
-					summary: []
-				};
-			} catch (e) {
-				console.error(`Failed to load skill ${fileName} from module ${moduleName}`);
-				return null;
-			}
-		});
+		let skills = moduleYaml.Skills.map((fileName: string) =>
+			loadSkill(baseUrl, moduleName, fileName.replace('.yaml', ''))
+		);
+
 		return {
 			name: moduleYaml.Module.Name,
 			skills: await Promise.all(skills)
