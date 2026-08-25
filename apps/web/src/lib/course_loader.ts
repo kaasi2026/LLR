@@ -7,7 +7,7 @@ export type Course = {
 	repositoryUrl: string;
 	specialCharacters: string[];
 	modules: Module[];
-	audioSettings: { enabled: boolean; ttsProvider: Record<string, any> };
+	audioSettings?: { enabled: boolean; ttsProvider: Record<string, any> };
 };
 
 export type Module = {
@@ -50,30 +50,35 @@ export async function loadCourse(baseUrl: string): Promise<Course> {
 		let text = await resp.text();
 		let moduleYaml = parse(text);
 		let skills = moduleYaml.Skills.map(async (fileName: string) => {
-			let resp = await fetch(`${baseUrl}/${moduleName}/skills/${fileName}`);
-			let text = await resp.text();
-			let skillYaml = parse(text);
-			return {
-				name: skillYaml.Skill.Name,
-				id: fileName.replace('.yaml', ''),
-				newWords: skillYaml['New words'].map(
-					(word: { Word: string; Translation: string; Images: string[] }) => {
+			try {
+				let resp = await fetch(`${baseUrl}/${moduleName}/skills/${fileName}`);
+				let text = await resp.text();
+				let skillYaml = parse(text);
+				return {
+					name: skillYaml.Skill.Name,
+					id: fileName.replace('.yaml', ''),
+					newWords: skillYaml['New words'].map(
+						(word: { Word: string; Translation: string; Images: string[] }) => {
+							return {
+								word: word.Word,
+								translation: word.Translation,
+								images: word.Images
+							};
+						}
+					),
+					phrases: skillYaml.Phrases.map((phrase: { Phrase: string; Translation: string }) => {
 						return {
-							word: word.Word,
-							translation: word.Translation,
-							images: word.Images
+							phrase: phrase.Phrase,
+							translation: phrase.Translation
 						};
-					}
-				),
-				phrases: skillYaml.Phrases.map((phrase: { Phrase: string; Translation: string }) => {
-					return {
-						phrase: phrase.Phrase,
-						translation: phrase.Translation
-					};
-				}),
-				dictionary: skillYaml['Mini-dictionary'],
-				summary: []
-			};
+					}),
+					dictionary: skillYaml['Mini-dictionary'],
+					summary: []
+				};
+			} catch (e) {
+				console.error(`Failed to load skill ${fileName} from module ${moduleName}`);
+				return null;
+			}
 		});
 		return {
 			name: moduleYaml.Module.Name,
@@ -97,7 +102,7 @@ export async function loadCourse(baseUrl: string): Promise<Course> {
 		repositoryUrl: courseYaml.Course.Repository,
 		specialCharacters: courseYaml.Course['Special characters'],
 		modules: await Promise.all(modules),
-		audioSettings: {
+		audioSettings: courseYaml.Settings.Audio && {
 			enabled: courseYaml.Settings.Audio.Enabled,
 			ttsProvider: courseYaml.Settings.Audio.TTS
 		}

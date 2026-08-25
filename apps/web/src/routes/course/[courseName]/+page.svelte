@@ -40,10 +40,15 @@
 					<!-- Description removed per design request -->
 				</div>
 				<Columns multiline class="surface-grid">
-					{#each skills as skill (skill.id)}
-						<Column sizeDesktop="1/3" sizeTablet="1/2">
-							<SkillCard {...skill} practiceHref={`/course/${data.courseName}/skill/${skill.id}`} />
-						</Column>
+					{#each skills as skill (skill?.id)}
+						{#if skill}
+							<Column sizeDesktop="1/3" sizeTablet="1/2">
+								<SkillCard
+									{...skill}
+									practiceHref={`/course/${data.courseName}/skill/${skill.id}`}
+								/>
+							</Column>
+						{/if}
 					{/each}
 				</Columns>
 			</div>

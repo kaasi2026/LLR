@@ -3,7 +3,6 @@ import courseIndex from '$lib/courses.json';
 export type CourseIndexEntry = {
 	// URL pointing to the RAW course files (eg raw.githubusercontent.com)
 	// This URL should contain a course.yml as its direct child to be valid
-	// TODO: Currently is points to a zip archive, so change that ASAP
 	url: string;
 	// Course repository URL
 	repositoryURL: string;

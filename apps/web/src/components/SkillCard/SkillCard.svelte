@@ -12,15 +12,13 @@
 
 	// TODO: Add an id prop when we have the db
 	let {
-		title,
-		levels,
+		name,
 		practiceHref,
 		introduction,
 		imageSet,
 		summary
 	}: {
-		title: string;
-		levels: number;
+		name: string;
 		practiceHref: string;
 		introduction: string;
 		imageSet: string[];
@@ -30,7 +28,6 @@
 	let completed: boolean = $state(false);
 	let started: boolean = $state(false);
 	let stale: boolean = $state(false);
-	let progress: boolean = $state(false);
 	let challengeHref = $state(practiceHref);
 	let introductionPageHref = $derived(introduction ? `${practiceHref}/introduction` : null);
 
@@ -82,7 +79,7 @@
 		<div>
 			<div class="media">
 				<ContentLeft {imageSet} {stale} {completed} />
-				<ContentCenter {progress} {stale} {levels} {title} {completed} {started} {summary} />
+				<ContentCenter {stale} {name} {completed} {summary} />
 			</div>
 		</div>
 	{/snippet}

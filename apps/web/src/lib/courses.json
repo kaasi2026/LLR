@@ -16,7 +16,7 @@
 		"description": "Spanish for English speakers"
 	},
 	{
-		"url": "https://github.com/szabgab/LibreLingo-Judeo-Spanish-from-English/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/szabgab/LibreLingo-Judeo-Spanish-from-English/refs/heads/main/course",
 		"repositoryURL": "https://github.com/szabgab/LibreLingo-Judeo-Spanish-from-English",
 		"paths": {
 			"yamlFolder": "LibreLingo-Judeo-Spanish-from-English-main",
@@ -31,7 +31,7 @@
 		"description": "Ladino for English speakers"
 	},
 	{
-		"url": "https://github.com/szabgab/LibreLingo-Judeo-Spanish-from-Hebrew/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/szabgab/LibreLingo-Judeo-Spanish-from-Hebrew/refs/heads/main/course",
 		"repositoryURL": "https://github.com/szabgab/LibreLingo-Judeo-Spanish-from-Hebrew",
 		"paths": {
 			"yamlFolder": "LibreLingo-Judeo-Spanish-from-Hebrew-main",
@@ -46,7 +46,7 @@
 		"description": "Ladino for Hebrew speakers"
 	},
 	{
-		"url": "https://github.com/szabgab/LibreLingo-Judeo-Spanish-from-Spanish/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/szabgab/LibreLingo-Judeo-Spanish-from-Spanish/refs/heads/main/course",
 		"repositoryURL": "https://github.com/szabgab/LibreLingo-Judeo-Spanish-from-Spanish",
 		"paths": {
 			"yamlFolder": "LibreLingo-Judeo-Spanish-from-Spanish-main",
@@ -61,7 +61,7 @@
 		"description": "Ladino for Spanish speakers"
 	},
 	{
-		"url": "https://github.com/szabgab/LibreLingo-Hungarian-from-Spanish/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/szabgab/LibreLingo-Hungarian-from-Spanish/refs/heads/main/course",
 		"repositoryURL": "https://github.com/szabgab/LibreLingo-Hungarian-from-Spanish",
 		"paths": {
 			"yamlFolder": "LibreLingo-Hungarian-from-Spanish-main",
@@ -76,7 +76,7 @@
 		"description": "Hungarian for Spanish speakers"
 	},
 	{
-		"url": "https://codeberg.org/Lamdarer/LibreLingo-DE-from-EN/archive/main.zip",
+		"url": "https://codeberg.org/Lamdarer/LibreLingo-DE-from-EN/raw/branch/main/course",
 		"repositoryURL": "https://codeberg.org/Lamdarer/LibreLingo-DE-from-EN",
 		"paths": {
 			"yamlFolder": "librelingo-de-from-en",
@@ -91,7 +91,7 @@
 		"description": "German for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-EU-from-EN/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-EU-from-EN/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-EU-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-EU-from-EN-main",
@@ -106,7 +106,7 @@
 		"description": "Basque for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-BN-from-EN/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-BN-from-EN/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-BN-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-BN-from-EN-main",
@@ -136,7 +136,7 @@
 		"description": "French for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-PAL-from-EN/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-PAL-from-EN/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-PAL-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-PAL-from-EN-main",
@@ -151,7 +151,7 @@
 		"description": "Parsig for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-Houma-from-EN/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-Houma-from-EN/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-Houma-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-Houma-from-EN-main",
@@ -166,7 +166,7 @@
 		"description": "Houma for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-ptBR-from-EN/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-ptBR-from-EN/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-ptBR-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-ptBR-from-EN",
@@ -181,7 +181,7 @@
 		"description": "Brazilian Portuguese for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-Neolatin-from-English/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-Neolatin-from-English/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-Neolatin-from-English",
 		"paths": {
 			"yamlFolder": "LibreLingo-Neolatin-from-English",
@@ -196,7 +196,7 @@
 		"description": "Neo-Latin for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-OCauv-from-FR/archive/refs/heads/main.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-OCauv-from-FR/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-OCauv-from-FR",
 		"paths": {
 			"yamlFolder": "LibreLingo-OCauv-from-FR",
@@ -211,7 +211,7 @@
 		"description": "Occitan Auvergnat for French speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingo/LibreLingo-KAB-from-FR/archive/refs/tags/last-passing.zip",
+		"url": "https://raw.githubusercontent.com/LibreLingo/LibreLingo-KAB-from-FR/refs/heads/main/course",
 		"repositoryURL": "https://github.com/LibreLingo/LibreLingo-KAB-from-FR",
 		"paths": {
 			"yamlFolder": "LibreLingo-KAB-from-FR-last-passing",
@@ -226,7 +226,7 @@
 		"description": "Kabyle course for French speakers."
 	},
 	{
-		"url": "https://codeberg.org/kate/LibreLingo_NL_from_EN/archive/master.zip",
+		"url": "https://codeberg.org/kate/LibreLingo_NL_from_EN/raw/branch/master/course",
 		"repositoryURL": "https://codeberg.org/kate/LibreLingo_NL_from_EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-NL-from-EN",
@@ -241,7 +241,7 @@
 		"description": "Dutch for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-RU-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-RU-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-RU-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-RU-from-EN",
@@ -257,7 +257,7 @@
 		"description": "Russian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-PL-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-PL-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-PL-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-PL-from-EN",
@@ -273,7 +273,7 @@
 		"description": "Polish Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-ISV-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-ISV-from-EN/refs/heads/master",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-ISV-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-ISV-from-EN",
@@ -289,7 +289,7 @@
 		"description": "Interslavic Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-UKR-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-UKR-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-UKR-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-UKR-from-EN",
@@ -305,7 +305,7 @@
 		"description": "Ukrainian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-CS-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-CS-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-CS-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-CS-from-EN",
@@ -321,7 +321,7 @@
 		"description": "Czech Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-SRB-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-SRB-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-SRB-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-SRB-from-EN",
@@ -337,7 +337,7 @@
 		"description": "Serbian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-BE-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-BE-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-BE-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-BE-from-EN",
@@ -353,7 +353,7 @@
 		"description": "Belarusian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-SL-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-SL-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-SL-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-SL-from-EN",
@@ -369,7 +369,7 @@
 		"description": "Slovenian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-SK-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-SK-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-SK-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-SK-from-EN",
@@ -385,7 +385,7 @@
 		"description": "Slovak Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-HRV-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-HRV-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-HRV-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-HRV-from-EN",
@@ -401,7 +401,7 @@
 		"description": "Croatian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-SZL-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-SZL-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-SZL-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-SZL-from-EN",
@@ -417,7 +417,7 @@
 		"description": "Silesian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-RUE-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-RUE-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-RUE-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-RUE-from-EN",
@@ -433,7 +433,7 @@
 		"description": "Rusin Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-OCU-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-OCU-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-OCU-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-OCU-from-EN",
@@ -449,7 +449,7 @@
 		"description": "Old-Church-Slavonic Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-HSB-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-HSB-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-HSB-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-HSB-from-EN",
@@ -465,7 +465,7 @@
 		"description": "Upper-Sorbian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-CU-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-CU-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-CU-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-CU-from-EN",
@@ -481,7 +481,7 @@
 		"description": "Church-Slavonic Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-DSB-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-DSB-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-DSB-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-DSB-from-EN",
@@ -497,7 +497,7 @@
 		"description": "Lower-Sorbian Course for English speakers"
 	},
 	{
-		"url": "https://github.com/LibreLingoCommunity/LibreLingo-CSB-from-EN",
+		"url": "https://raw.githubusercontent.com/LibreLingoCommunity/LibreLingo-CSB-from-EN/refs/heads/main",
 		"repositoryURL": "https://github.com/LibreLingoCommunity/LibreLingo-CSB-from-EN",
 		"paths": {
 			"yamlFolder": "LibreLingo-CSB-from-EN",
