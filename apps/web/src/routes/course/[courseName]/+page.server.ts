@@ -10,7 +10,7 @@ export async function load({ params }) {
 	console.log(courseIndexEntry);
 	if (!courseIndexEntry) return { status: 404 }; // Course not found
 
-	let course = await loadCourse(courseIndexEntry.url);
+	let course = await loadCourse(courseIndexEntry);
 	console.log(course);
 	return { course, courseName };
 }

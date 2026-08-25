@@ -1,4 +1,5 @@
 import { parse } from 'yaml';
+import type { CourseIndexEntry } from './course_index';
 
 export type Course = {
 	language: { name: string; code: string };
@@ -42,6 +43,8 @@ export type Phrase = {
 };
 
 export type Dictionary = Record<string, any>;
+
+const courseCache = new Map<string, Course>();
 
 async function loadSkill(baseUrl: string, moduleName: string, skillName: string) {
 	try {
@@ -106,45 +109,55 @@ async function loadSkill(baseUrl: string, moduleName: string, skillName: string)
 	}
 }
 
-export async function loadCourse(baseUrl: string): Promise<Course> {
-	const resp = await fetch(`${baseUrl}/course.yaml`);
-	const text = await resp.text();
-	const courseYaml = parse(text);
+export async function loadCourse(courseIndexEntry: CourseIndexEntry): Promise<Course> {
+	if (!courseCache.has(courseIndexEntry.name)) {
+		console.log(`Loading course ${courseIndexEntry.name}`);
+		const baseUrl = courseIndexEntry.url;
+		const resp = await fetch(`${baseUrl}/course.yaml`);
+		const text = await resp.text();
+		const courseYaml = parse(text);
 
-	// Load the course modules
-	let modules = courseYaml.Modules.map(async (moduleName: string) => {
-		let resp = await fetch(`${baseUrl}/${moduleName}/module.yaml`);
-		let text = await resp.text();
-		let moduleYaml = parse(text);
-		let skills = moduleYaml.Skills.map((fileName: string) =>
-			loadSkill(baseUrl, moduleName, fileName.replace('.yaml', ''))
-		);
+		// Load the course modules
+		let modules = courseYaml.Modules.map(async (moduleName: string) => {
+			let resp = await fetch(`${baseUrl}/${moduleName}/module.yaml`);
+			let text = await resp.text();
+			let moduleYaml = parse(text);
+			let skills = moduleYaml.Skills.map((fileName: string) =>
+				loadSkill(baseUrl, moduleName, fileName.replace('.yaml', ''))
+			);
 
-		return {
-			name: moduleYaml.Module.Name,
-			skills: await Promise.all(skills)
+			return {
+				name: moduleYaml.Module.Name,
+				skills: await Promise.all(skills)
+			};
+		});
+
+		let course = {
+			language: {
+				name: courseYaml.Course.Language.Name,
+				code: courseYaml.Course.Language['IETF BCP 47']
+			},
+			sourceLanguage: {
+				name: courseYaml.Course['For speakers of'].Name,
+				code: courseYaml.Course['For speakers of']['IETF BCP 47']
+			},
+			license: {
+				name: courseYaml.Course.License['Short name'],
+				url: courseYaml.Course.License.Link
+			},
+			repositoryUrl: courseYaml.Course.Repository,
+			specialCharacters: courseYaml.Course['Special characters'],
+			modules: await Promise.all(modules),
+			audioSettings: courseYaml.Settings?.Audio && {
+				enabled: courseYaml.Settings.Audio.Enabled,
+				ttsProvider: courseYaml.Settings.Audio.TTS
+			}
 		};
-	});
 
-	return {
-		language: {
-			name: courseYaml.Course.Language.Name,
-			code: courseYaml.Course.Language['IETF BCP 47']
-		},
-		sourceLanguage: {
-			name: courseYaml.Course['For speakers of'].Name,
-			code: courseYaml.Course['For speakers of']['IETF BCP 47']
-		},
-		license: {
-			name: courseYaml.Course.License['Short name'],
-			url: courseYaml.Course.License.Link
-		},
-		repositoryUrl: courseYaml.Course.Repository,
-		specialCharacters: courseYaml.Course['Special characters'],
-		modules: await Promise.all(modules),
-		audioSettings: courseYaml.Settings?.Audio && {
-			enabled: courseYaml.Settings.Audio.Enabled,
-			ttsProvider: courseYaml.Settings.Audio.TTS
-		}
-	};
+		courseCache.set(courseIndexEntry.name, course); // Store course in the cache
+
+		return course;
+	} else {
+		return courseCache.get(courseIndexEntry.name)!;
+	}
 }
