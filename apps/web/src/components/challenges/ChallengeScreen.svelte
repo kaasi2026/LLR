@@ -10,28 +10,21 @@
 	import { fade, scale } from 'svelte/transition';
 	import { browser } from '$app/environment';
 
-	// TODO: remove this
-	function shuffle<T>(array: T[]): T[] {
-		const result = [...array];
-		for (let i = result.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[result[i], result[j]] = [result[j], result[i]];
-		}
-		return result;
-	}
-
 	let {
-		rawChallenges,
+		rawchallenges,
 		languageName,
 		languageCode,
 		specialCharacters,
-		sortChallengeGroups,
 		courseURL,
-		skillId,
-		expectedNumberOfChallenges
+		skillId
+	}: {
+		rawchallenges: ChallengeData[];
+		languageName: string;
+		languageCode: string;
+		specialCharacters: string[];
+		courseURL: string;
+		skillId: string;
 	} = $props();
-
-	const testChallenge = browser && new URLSearchParams(window.location.search).get('testChallenge');
 
 	type CardChallengeData = {
 		id: string;
@@ -66,10 +59,6 @@
 		| ShortInputChallengeData
 		| ChipsChallengeData;
 
-	let rawchallenges: ChallengeData[] = sortChallengeGroups(
-		shuffle(rawChallenges),
-		expectedNumberOfChallenges
-	);
 	let challengeCount = rawchallenges.length;
 
 	let challenges: ChallengeData[] = $state([...rawchallenges]);
@@ -89,9 +78,10 @@
 
 	challenges && challenges.map((c: any) => c.pictures && c.pictures.map(preloadImage));
 
+	// NOTE: This is probably wrong
 	let alternativeChallenges = $derived(
 		currentChallenge &&
-			rawChallenges.filter(({ id }: { id: string }) => id !== currentChallenge?.id)
+			rawchallenges.filter(({ id }: { id: string }) => id !== currentChallenge?.id)
 	);
 
 	const registerResult = (isCorrect: boolean) => {
