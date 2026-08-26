@@ -1,7 +1,7 @@
 import courseIndex from '$lib/course_index';
 import { loadCourse } from '$lib/course_loader';
 
-export async function load({ params }) {
+export async function load({ params }: { params: { courseName: string } }) {
 	let { courseName } = params;
 	// TODO:: Inefficient
 
