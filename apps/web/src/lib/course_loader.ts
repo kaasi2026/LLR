@@ -32,14 +32,14 @@ export type Skill = {
 };
 
 export type Word = {
-	word: string;
-	translation: string;
+	targetLanguage: string;
+	sourceLanguage: string;
 	images: string[];
 };
 
 export type Phrase = {
-	phrase: string;
-	translation: string;
+	targetLanguage: string;
+	sourceLanguage: string;
 };
 
 export type Dictionary = Record<string, any>;
@@ -72,8 +72,8 @@ async function loadSkill(baseUrl: string, moduleName: string, skillName: string)
 		let newWords: Word[] = skillYaml['New words'].map(
 			(word: { Word: string; Translation: string; Images: string[] }) => {
 				return {
-					word: word.Word,
-					translation: word.Translation,
+					targetLanguage: word.Word,
+					sourceLanguage: word.Translation,
 					images: word.Images
 				};
 			}
@@ -82,14 +82,14 @@ async function loadSkill(baseUrl: string, moduleName: string, skillName: string)
 		let phrases: Phrase[] = skillYaml.Phrases.map(
 			(phrase: { Phrase: string; Translation: string }) => {
 				return {
-					phrase: phrase.Phrase,
-					translation: phrase.Translation
+					targetLanguage: phrase.Phrase,
+					sourceLanguage: phrase.Translation
 				};
 			}
 		);
 		let summary = [
-			...newWords.map((word) => word.translation),
-			...phrases.map((phrase) => phrase.translation)
+			...newWords.map((word) => word.sourceLanguage),
+			...phrases.map((phrase) => phrase.sourceLanguage)
 		];
 
 		return {
