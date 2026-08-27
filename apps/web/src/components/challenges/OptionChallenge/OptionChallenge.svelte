@@ -4,6 +4,7 @@
 	import Options from '../Options.svelte';
 	import ChallengePanel from '../ChallengePanel.svelte';
 	import { prepareChallenge } from '$lib/generic';
+	import type { OptionsChallengeData } from '$lib/challenges';
 
 	let {
 		currentChallenge,
@@ -12,6 +13,13 @@
 		registerResult,
 		skipChallenge,
 		skipAllChallenges
+	}: {
+		currentChallenge: OptionsChallengeData;
+		alternativeChallenges: OptionsChallengeData[];
+		resolveChallenge: () => void;
+		registerResult: (isCorrect: boolean) => void;
+		skipChallenge: () => void;
+		skipAllChallenges: () => void;
 	} = $props();
 
 	let selectedOption = $state(null);

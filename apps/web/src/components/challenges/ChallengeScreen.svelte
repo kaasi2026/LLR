@@ -9,6 +9,7 @@
 	import ProgressBar from '../ProgressBar.svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { browser } from '$app/environment';
+	import type { ChallengeData } from '$lib/challenges';
 
 	let {
 		rawchallenges,
@@ -23,42 +24,10 @@
 		languageCode: string;
 		specialCharacters: string[];
 		courseURL: string;
-		skillId: string;
+		skillId: number;
 	} = $props();
 
-	type CardChallengeData = {
-		id: string;
-		type: 'cards';
-		pictures: Array<string>;
-	};
-
-	type ListeningChallengeData = {
-		id: string;
-		type: 'listeningExercise';
-	};
-
-	type OptionsChallengeData = {
-		id: string;
-		type: 'options';
-	};
-
-	type ShortInputChallengeData = {
-		id: string;
-		type: 'shortInput';
-	};
-
-	type ChipsChallengeData = {
-		id: string;
-		type: 'chips';
-	};
-
-	type ChallengeData =
-		| CardChallengeData
-		| ListeningChallengeData
-		| OptionsChallengeData
-		| ShortInputChallengeData
-		| ChipsChallengeData;
-
+	
 	let challengeCount = rawchallenges.length;
 
 	let challenges: ChallengeData[] = $state([...rawchallenges]);

@@ -7,6 +7,7 @@
 	import Column from 'components/Column.svelte';
 	import Columns from 'components/Columns.svelte';
 	import evaluateAnswer from 'answer-corrector/src/index';
+	import type { ShortInputChallengeData } from '$lib/challenges';
 
 	// TODO: remove this
 	function shuffle<T>(array: T[]): T[] {
@@ -27,6 +28,15 @@
 		specialCharacters,
 		skipChallenge,
 		skipAllChallenges
+	}: {
+		challenge: ShortInputChallengeData;
+		registerResult: (isCorrect: boolean) => void;
+		resolveChallenge: () => void;
+		languageName: string;
+		languageCode: string;
+		specialCharacters: string[];
+		skipChallenge: () => void;
+		skipAllChallenges: () => void;
 	} = $props();
 
 	let answer: string | null = $state('');

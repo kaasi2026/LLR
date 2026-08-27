@@ -1,5 +1,6 @@
 import { parse } from 'yaml';
 import type { CourseIndexEntry } from './course_index';
+import { loadCourseDict, type DictionaryItem } from './challenges/dictionary';
 
 export type Course = {
 	language: { name: string; code: string };
@@ -9,6 +10,7 @@ export type Course = {
 	specialCharacters: string[];
 	modules: Module[];
 	audioSettings?: { enabled: boolean; ttsProvider: Record<string, any> };
+	dictionary: DictionaryItem[];
 };
 
 export type Module = {
@@ -32,19 +34,46 @@ export type Skill = {
 };
 
 export type Word = {
-	targetLanguage: string;
-	sourceLanguage: string;
+	targetLanguage: string[];
+	sourceLanguage: string[];
 	images: string[];
 };
 
 export type Phrase = {
-	targetLanguage: string;
-	sourceLanguage: string;
+	targetLanguage: string[];
+	sourceLanguage: string[];
 };
 
 export type Dictionary = Record<string, any>;
 
 const courseCache = new Map<string, Course>();
+
+// Convert a YAML word definition into a Word() object
+function convert_word(raw_word: {
+	Word: string;
+	Synonyms: string;
+	Translation: string;
+	'Also accepted': string[];
+	Images: string[];
+}): Word {
+	return {
+		targetLanguage: [raw_word['Word'], ...raw_word['Synonyms']],
+		sourceLanguage: [raw_word['Translation'], ...raw_word['Also accepted']],
+		images: raw_word['Images']
+	};
+}
+
+function convert_phrase(raw_phrase: {
+	Phrase: string;
+	Translation: string;
+	'Alternative versions': string[];
+	'Alternative translations': string[];
+}): Phrase {
+	return {
+		targetLanguage: [raw_phrase['Phrase'], ...raw_phrase['Alternative versions']],
+		sourceLanguage: [raw_phrase['Translation'], ...raw_phrase['Alternative translations']]
+	};
+}
 
 async function loadSkill(baseUrl: string, moduleName: string, skillName: string) {
 	try {
@@ -69,24 +98,9 @@ async function loadSkill(baseUrl: string, moduleName: string, skillName: string)
 			}
 		} catch {}
 
-		let newWords: Word[] = skillYaml['New words'].map(
-			(word: { Word: string; Translation: string; Images: string[] }) => {
-				return {
-					targetLanguage: word.Word,
-					sourceLanguage: word.Translation,
-					images: word.Images
-				};
-			}
-		);
+		let newWords: Word[] = skillYaml['New words'].map((word: any) => convert_word(word));
 
-		let phrases: Phrase[] = skillYaml.Phrases.map(
-			(phrase: { Phrase: string; Translation: string }) => {
-				return {
-					targetLanguage: phrase.Phrase,
-					sourceLanguage: phrase.Translation
-				};
-			}
-		);
+		let phrases: Phrase[] = skillYaml.Phrases.map((phrase: any) => convert_phrase(phrase));
 		let summary = [
 			...newWords.map((word) => word.sourceLanguage),
 			...phrases.map((phrase) => phrase.sourceLanguage)
@@ -151,7 +165,8 @@ export async function loadCourse(courseIndexEntry: CourseIndexEntry): Promise<Co
 			audioSettings: courseYaml.Settings?.Audio && {
 				enabled: courseYaml.Settings.Audio.Enabled,
 				ttsProvider: courseYaml.Settings.Audio.TTS
-			}
+			},
+			dictionary: loadCourseDict(modules)
 		};
 
 		courseCache.set(courseIndexEntry.name, course); // Store course in the cache
