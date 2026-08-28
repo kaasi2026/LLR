@@ -1,6 +1,6 @@
 import { parse } from 'yaml';
 import type { CourseIndexEntry } from './course_index';
-import { loadCourseDict, type DictionaryItem } from './challenges/dictionary';
+import { loadCourseDict, loadSkillMiniDict, type DictionaryItem } from './challenges/dictionary';
 
 export type Course = {
 	language: { name: string; code: string };
@@ -10,7 +10,7 @@ export type Course = {
 	specialCharacters: string[];
 	modules: Module[];
 	audioSettings?: { enabled: boolean; ttsProvider: Record<string, any> };
-	dictionary: DictionaryItem[];
+	dictionary: { word: string; definition: string; is_in_target_language: boolean }[];
 };
 
 export type Module = {
@@ -26,7 +26,7 @@ export type Skill = {
 	id: number;
 	newWords: Word[];
 	phrases: Phrase[];
-	dictionary: Dictionary[];
+	dictionary: DictionaryItem[];
 	// The list of new words and phrases inside the skill
 	summary: string[];
 	introduction?: string;
@@ -44,21 +44,19 @@ export type Phrase = {
 	sourceLanguage: string[];
 };
 
-export type Dictionary = Record<string, any>;
-
 const courseCache = new Map<string, Course>();
 
 // Convert a YAML word definition into a Word() object
 function convert_word(raw_word: {
 	Word: string;
-	Synonyms: string;
+	Synonyms?: string;
 	Translation: string;
-	'Also accepted': string[];
+	'Also accepted'?: string[];
 	Images: string[];
 }): Word {
 	return {
-		targetLanguage: [raw_word['Word'], ...raw_word['Synonyms']],
-		sourceLanguage: [raw_word['Translation'], ...raw_word['Also accepted']],
+		targetLanguage: [raw_word['Word'], ...(raw_word['Synonyms'] ?? [])],
+		sourceLanguage: [raw_word['Translation'], ...(raw_word['Also accepted'] ?? [])],
 		images: raw_word['Images']
 	};
 }
@@ -70,12 +68,18 @@ function convert_phrase(raw_phrase: {
 	'Alternative translations': string[];
 }): Phrase {
 	return {
-		targetLanguage: [raw_phrase['Phrase'], ...raw_phrase['Alternative versions']],
-		sourceLanguage: [raw_phrase['Translation'], ...raw_phrase['Alternative translations']]
+		targetLanguage: [raw_phrase['Phrase'], ...(raw_phrase['Alternative versions'] ?? [])],
+		sourceLanguage: [raw_phrase['Translation'], ...(raw_phrase['Alternative translations'] ?? [])]
 	};
 }
 
-async function loadSkill(baseUrl: string, moduleName: string, skillName: string) {
+async function loadSkill(
+	baseUrl: string,
+	moduleName: string,
+	skillName: string,
+	sourceLanguageName: string,
+	targetLanguageName: string
+): Promise<Skill | null> {
 	try {
 		let resp = await fetch(`${baseUrl}/${moduleName}/skills/${skillName}.yaml`);
 
@@ -101,9 +105,9 @@ async function loadSkill(baseUrl: string, moduleName: string, skillName: string)
 		let newWords: Word[] = skillYaml['New words'].map((word: any) => convert_word(word));
 
 		let phrases: Phrase[] = skillYaml.Phrases.map((phrase: any) => convert_phrase(phrase));
-		let summary = [
-			...newWords.map((word) => word.sourceLanguage),
-			...phrases.map((phrase) => phrase.sourceLanguage)
+		let summary: string[] = [
+			...newWords.map((word) => word.sourceLanguage[0]),
+			...phrases.map((phrase) => phrase.sourceLanguage[0])
 		];
 
 		return {
@@ -113,12 +117,12 @@ async function loadSkill(baseUrl: string, moduleName: string, skillName: string)
 			introduction,
 			newWords,
 			phrases,
-			dictionary: skillYaml['Mini-dictionary'],
+			dictionary: loadSkillMiniDict(skillYaml, sourceLanguageName, targetLanguageName),
 			summary,
 			imageSet: skillYaml.Skill.Thumbnails
 		};
 	} catch (e) {
-		console.error(`Failed to load skill ${skillName} from module ${moduleName}: ${e}`);
+		console.error(`Failed to load skill ${skillName} from module ${moduleName}`, e);
 		return null;
 	}
 }
@@ -137,7 +141,13 @@ export async function loadCourse(courseIndexEntry: CourseIndexEntry): Promise<Co
 			let text = await resp.text();
 			let moduleYaml = parse(text);
 			let skills = moduleYaml.Skills.map((fileName: string) =>
-				loadSkill(baseUrl, moduleName, fileName.replace('.yaml', ''))
+				loadSkill(
+					baseUrl,
+					moduleName,
+					fileName.replace('.yaml', ''),
+					courseYaml.Course.Language.Name,
+					courseYaml.Course['For speakers of'].Name
+				)
 			);
 
 			return {
@@ -145,6 +155,8 @@ export async function loadCourse(courseIndexEntry: CourseIndexEntry): Promise<Co
 				skills: await Promise.all(skills)
 			};
 		});
+
+		let awaitedModules = await Promise.all(modules);
 
 		let course = {
 			language: {
@@ -161,12 +173,12 @@ export async function loadCourse(courseIndexEntry: CourseIndexEntry): Promise<Co
 			},
 			repositoryUrl: courseYaml.Course.Repository,
 			specialCharacters: courseYaml.Course['Special characters'],
-			modules: await Promise.all(modules),
+			modules: awaitedModules,
 			audioSettings: courseYaml.Settings?.Audio && {
 				enabled: courseYaml.Settings.Audio.Enabled,
 				ttsProvider: courseYaml.Settings.Audio.TTS
 			},
-			dictionary: loadCourseDict(modules)
+			dictionary: loadCourseDict(awaitedModules)
 		};
 
 		courseCache.set(courseIndexEntry.name, course); // Store course in the cache

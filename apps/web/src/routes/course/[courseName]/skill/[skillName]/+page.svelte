@@ -7,7 +7,7 @@
 	let { data } = $props();
 
 	let skill: Skill = $derived(data.skill);
-	let challenges = $derived(generateChallenges(skill));
+	let challenges = $derived(generateChallenges(skill, data.course));
 
 	let numLevels = $derived(levelCount(skill.newWords.length, skill.phrases.length));
 	const challengesPerLevel = $derived(challenges.length / numLevels);

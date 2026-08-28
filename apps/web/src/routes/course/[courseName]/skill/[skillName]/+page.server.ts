@@ -27,6 +27,7 @@ export async function load({
 
 	return {
 		skill,
+		course,
 		courseUrl: `/course/${courseIndexEntry.name}`,
 		language: course.language,
 		repositoryURL: course.repositoryUrl,
