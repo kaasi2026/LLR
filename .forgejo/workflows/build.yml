@@ -1,0 +1,74 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  frontend:
+    name: Frontend (build, lint, type-check)
+    runs-on: docker
+    steps:
+      - name: Check out repository
+        uses: https://code.forgejo.org/actions/checkout@v7
+
+      # apps/web exports the YAML courses in courses/ during its build step,
+      # which requires a Python 3.8-3.10 interpreter on PATH (see
+      # apps/web/scripts/prepareCourses.js).
+      - name: Set up Python
+        uses: https://code.forgejo.org/actions/setup-python@v7
+        with:
+          python-version: '3.10'
+
+      - name: Set up Node.js
+        uses: https://code.forgejo.org/actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build answer-corrector
+        run: npm run build -w answer-corrector
+
+      - name: Build web app
+        run: npm run build -w web
+
+      - name: Type-check web app
+        run: npm run check -w web
+
+      - name: Smoke test built web app
+        run: |
+          npm run preview -w web &
+          PREVIEW_PID=$!
+          curl --fail --retry 5 --retry-connrefused --retry-delay 2 http://localhost:5173/
+          kill $PREVIEW_PID
+
+  backend:
+    name: Backend (pytest)
+    runs-on: docker
+    defaults:
+      run:
+        working-directory: src
+    steps:
+      - name: Check out repository
+        uses: https://code.forgejo.org/actions/checkout@v7
+
+      - name: Set up Python
+        uses: https://code.forgejo.org/actions/setup-python@v7
+        with:
+          python-version: '3.10'
+
+      - name: Install PDM
+        run: pip install pdm
+
+      - name: Install dependencies
+        run: pdm install
+
+      - name: Run tests
+        run: pdm run pytest
