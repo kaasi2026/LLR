@@ -1,0 +1,101 @@
+name: Security report
+about: Report a security vulnerability (e.g. CVEs, XSS, injection, auth issues).
+labels: [security]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping to make LibreLingoRelive more secure!
+
+        **Please do not report actively exploitable vulnerabilities here.
+        For critical issues, contact the maintainers privately first.**
+
+  - type: checkboxes
+    attributes:
+      label: Please confirm that;
+      options:
+        - label: This issue is about a security vulnerability and not a regular bug or question.
+          required: true
+        - label: I have searched the [issues](https://codeberg.org/LibreLingoRelive/LibreLingoRelive/issues), and I didn't find an existing report for this vulnerability.
+          required: true
+        - label: I have read and understood the [Codeberg Terms of Use](https://codeberg.org/Codeberg/org/src/branch/main/TermsOfUse.md) for images or other type of content that I included here.
+          required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: What is the severity of this vulnerability?
+      options:
+        - Critical (remote code execution, full compromise)
+        - High (privilege escalation, data leak, auth bypass)
+        - Medium (XSS, CSRF, limited data exposure)
+        - Low (minor misconfiguration, information disclosure)
+        - I am not sure
+      default: 3
+    validations:
+      required: true
+
+  - type: input
+    id: cve
+    attributes:
+      label: Is there a CVE or advisory ID for this vulnerability?
+      description: Leave empty if this is a previously unknown issue.
+      placeholder: e.g. CVE-2025-12345
+
+  - type: input
+    id: version
+    attributes:
+      label: What is your LibreLingoRelive version?
+      description: include tag / commit SHA.
+      placeholder: e.g. commit 1adce91411
+    validations:
+      required: true
+
+  - type: textarea
+    id: content
+    attributes:
+      label: Describe the vulnerability.
+      description: >
+        What is affected, how can it be exploited, and what is the impact?
+        **Reports without a clear description of the issue and its impact
+        could be closed without further comments.**
+      placeholder: Describe the affected component, the attack path and the potential impact.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce.
+      description: Step-by-step instructions to reproduce the vulnerability.
+      placeholder: |
+        1. Go to ...
+        2. Send / modify ...
+        3. Observe ...
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: What is the impact of this vulnerability?
+      description: e.g. data loss, account takeover, execution of arbitrary code, denial of service.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Do you have logs, payloads or proof-of-concept material?
+      description: >
+        If possible, please attach logs, request/response captures or a
+        minimal proof of concept. This will be automatically formatted into
+        code, so no need for backticks.
+      render: shell
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Do you have a suggested fix or mitigation?
+      description: Optional. If you have an idea how to fix or mitigate the issue, share it here.
