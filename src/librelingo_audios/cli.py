@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 import os
 import sys
-import yaml
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from librelingo_audios.tts import get_tts
-
 try:
+    import yaml
+    from librelingo_audios.tts import get_tts
     from librelingo_yaml_loader import load_course
     from librelingo_utils import (
         audio_id,
@@ -18,8 +17,11 @@ try:
         iterate_words,
         remove_control_characters_for_display,
     )
-except Exception:
-    load_course = None
+except ModuleNotFoundError as error:
+    raise SystemExit(
+        f"Missing Python dependency '{error.name}'. From the repository root, install the local project with "
+        "`python -m pip install -e ./src` in Python 3.8-3.14."
+    ) from error
 
 
 def load_config():
@@ -38,13 +40,7 @@ def generate_course_audio(course_path, output_dir, course_name):
     # Load config
     config = load_config()
 
-    # Load course object if available
-    course = None
-    if load_course:
-        course = load_course(course_path)
-    else:
-        print("Warning: `librelingo_yaml_loader` not available; aborting")
-        return
+    course = load_course(course_path)
 
     # Check, if audio has been activated
     if not course.settings.audio_settings.enabled:

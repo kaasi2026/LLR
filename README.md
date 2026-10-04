@@ -26,16 +26,12 @@ git lfs pull
 
 then add a course or use the test-2 course and copy or clone it to courses.
 
-# back to your root directory and add audio for your course
-# if you have once generated the audio it's better to copy paste the folder instead of generating it all the time
-
-PYTHONPATH=src python3.10 src/librelingo_audios/cli.py courses/language-from-language apps/web/static/voice language-from-language
-
-# E.g. like this
- PYTHONPATH=src python3.10 src/librelingo_audios/cli.py courses/fr-from-en apps/web/static/voice fr-from-en
-
 cd src
 uv sync
+
+# Generate audio for your course (set this to a directory under ../courses)
+COURSE_NAME=your-course-name
+uv run python3 -m librelingo_audios.cli ../courses/$COURSE_NAME ../apps/web/static/voice $COURSE_NAME
 
 mkdir -p ../apps/web/src/courses/
 uv run python3 -m librelingo_json_export.cli $PATH_TO_COURSE_YAML_SOURCE_DIR ../apps/web/src/courses/$CONVERTED_COURSE_NAME
@@ -59,19 +55,15 @@ git lfs pull
 
 then add a course or use the test-2 course and copy or clone it to courses.
 
-# back to your root directory and add audio for your course
-# if you have once generated the audio it's better to copy paste the folder instead of generating it all the time
-
-PYTHONPATH=src python3.10 src/librelingo_audios/cli.py courses/language-from-language apps/web/static/voice language-from-language
-
-# E.g. like this
- PYTHONPATH=src python3.10 src/librelingo_audios/cli.py courses/fr-from-en apps/web/static/voice fr-from-en
-
 # Docker build
 docker-compose build
 
 # Setup
 docker-compose up -d 
+
+# Generate audio for your course inside the Python container
+COURSE_NAME=your-course-name
+docker-compose exec librelingo python3 -m librelingo_audios.cli /data/courses/$COURSE_NAME /apps/web/static/voice $COURSE_NAME
 
 The service should be available under http://localhost:5173
 ```

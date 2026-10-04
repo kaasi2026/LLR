@@ -51,7 +51,7 @@ description = "a set of tools and libraries for building applications using libr
 authors = [
     {name = "Dániel Kántor", email = "git@daniel-kantor.com"},
 ]
-requires-python = "<3.11,>=3.8"
+requires-python = ">=3.8,<3.15"
 #readme = "README.md"
 license = {text = "AGPL-3.0"}
 dependencies = [

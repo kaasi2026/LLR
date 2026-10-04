@@ -36,11 +36,15 @@ const webCoursesDir = path.resolve(webRoot, 'src', 'courses');
 
 const pythonCommandCandidates = [
 	process.env.PYTHON_BIN,
+	'python3',
+	'python',
+	'python3.14',
+	'python3.13',
+	'python3.12',
+	'python3.11',
 	'python3.10',
 	'python3.9',
-	'python3.8',
-	'python3',
-	'python'
+	'python3.8'
 ].filter(Boolean);
 
 function parsePythonVersion(output) {
@@ -50,10 +54,10 @@ function parsePythonVersion(output) {
 }
 
 function isSupportedPythonVersion(version) {
-	// The project packages require Python 3.8 through 3.10.
+	// The project supports Python 3.8 through 3.14.
 	if (!version) return false;
 	if (version.major !== 3) return false;
-	return version.minor >= 8 && version.minor <= 10;
+	return version.minor >= 8 && version.minor < 15;
 }
 
 function findPython() {
