@@ -26,6 +26,10 @@ git lfs pull
 
 then add a course or use the test-2 course and copy or clone it to courses.
 
+# Fedora: install Python headers and a C++ compiler before syncing dependencies.
+# Some Python packages, such as editdistance, build a native extension.
+sudo dnf install python3-devel gcc-c++
+
 cd src
 uv sync
 
