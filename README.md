@@ -65,15 +65,22 @@ docker-compose build
 # Setup
 docker-compose up -d 
 
-# Generate audio for your course (replace this with a folder under ./courses)
+# Use the exact folder name that contains your course.yaml file.
 COURSE_NAME=ger-from-en
 
-# `exec` runs this in the already-running librelingo service. Its image includes
-# Python and the project dependencies; they do not need to be installed on your host.
-# Compose mounts ./courses at /data/courses and ./apps/web at /apps/web, so the
-# generated audio appears in ./apps/web/static/voice on your host.
+# Check that the course folder is correct.
+test -f "courses/$COURSE_NAME/course.yaml" || { echo "Course not found: courses/$COURSE_NAME/course.yaml"; exit 1; }
+
+# Start the Python service if it is not already running.
+docker-compose up -d librelingo
+
+# Generate one MP3 for each unique target-language word and phrase in the course.
+# No Python installation is needed on the host: this runs inside the librelingo container.
+# The generated MP3 files appear on the host in apps/web/static/voice/.
 docker-compose exec librelingo python3 -m librelingo_audios.cli \
-	/data/courses/$COURSE_NAME /apps/web/static/voice $COURSE_NAME
+	"/data/courses/$COURSE_NAME" /apps/web/static/voice "$COURSE_NAME"
+
+# Audio must be enabled in the course's course.yaml. gTTS also needs internet access.
 
 The service should be available under http://localhost:5173
 ```

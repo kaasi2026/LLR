@@ -559,6 +559,20 @@ def _convert_settings(data, course: Course):
     )
 
 
+def _validate_unique_skill_ids(modules):
+    skill_files_by_id = {}
+    for module in modules:
+        for skill in module.skills:
+            skill_id = str(skill.id)
+            previous_file = skill_files_by_id.get(skill_id)
+            if previous_file is not None:
+                raise ValidationError(
+                    f'Duplicate skill ID "{skill_id}" in "{previous_file}" and '
+                    f'"{skill.filename}". Skill IDs must be unique within a course.'
+                )
+            skill_files_by_id[skill_id] = skill.filename
+
+
 def load_course(path: str):
     """
     Load a YAML-based course into a Course() object
@@ -584,6 +598,7 @@ def load_course(path: str):
         }
     )
     modules = _load_modules(path, raw_modules, dumb_course)
+    _validate_unique_skill_ids(modules)
 
     return Course(
         **{
