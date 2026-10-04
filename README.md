@@ -61,9 +61,15 @@ docker-compose build
 # Setup
 docker-compose up -d 
 
-# Generate audio for your course inside the Python container
-COURSE_NAME=your-course-name
-docker-compose exec librelingo python3 -m librelingo_audios.cli /data/courses/$COURSE_NAME /apps/web/static/voice $COURSE_NAME
+# Generate audio for your course (replace this with a folder under ./courses)
+COURSE_NAME=ger-from-en
+
+# `exec` runs this in the already-running librelingo service. Its image includes
+# Python and the project dependencies; they do not need to be installed on your host.
+# Compose mounts ./courses at /data/courses and ./apps/web at /apps/web, so the
+# generated audio appears in ./apps/web/static/voice on your host.
+docker-compose exec librelingo python3 -m librelingo_audios.cli \
+	/data/courses/$COURSE_NAME /apps/web/static/voice $COURSE_NAME
 
 The service should be available under http://localhost:5173
 ```

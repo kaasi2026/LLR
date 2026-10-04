@@ -43,7 +43,7 @@
 						<h3 style="text-align:center">Courses available locally</h3>
 						{#each coursesFs as course (course.path)}
 							<Stack justify="center">
-								<Button style="primary" size="large" href="course/{course.path}">
+								<Button style="primary" size="large" href={`/course/${course.path}`}>
 									<Translate key="index.start_{course.language}_course"
 										>Start learning {course.language}</Translate
 									>
@@ -55,29 +55,29 @@
 			</Stack>
 
 			<Hidden>
-				<Button style="primary" href="course/german-from-english">Start learning German</Button>
+				<Button style="primary" href="/course/german-from-english">Start learning German</Button>
 
-				<Button style="primary" href="course/bangla-from-english">Start learning Bangla</Button>
+				<Button style="primary" href="/course/bangla-from-english">Start learning Bangla</Button>
 
-				<Button style="primary" href="course/parsig-from-english"
+				<Button style="primary" href="/course/parsig-from-english"
 					>Start learning Middle Persian</Button
 				>
 
-				<Button style="primary" href="course/basque-from-english">Start learning Basque</Button>
+				<Button style="primary" href="/course/basque-from-english">Start learning Basque</Button>
 
-				<Button style="primary" href="course/ladino-from-english">
+				<Button style="primary" href="/course/ladino-from-english">
 					Start learning Ladino (for English speakers)
 				</Button>
 
-				<Button style="primary" href="course/ladino-from-hebrew">
+				<Button style="primary" href="/course/ladino-from-hebrew">
 					Start learning Ladino (for Hebrew speakers)
 				</Button>
 
-				<Button style="primary" href="course/ladino-from-spanish">
+				<Button style="primary" href="/course/ladino-from-spanish">
 					Start learning Ladino (for Spanish speakers)
 				</Button>
 
-				<Button style="primary" href="course/houma-from-english">
+				<Button style="primary" href="/course/houma-from-english">
 					Start learning Houma (for English speakers)
 				</Button>
 			</Hidden>
