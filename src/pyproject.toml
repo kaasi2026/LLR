@@ -51,7 +51,7 @@ description = "a set of tools and libraries for building applications using libr
 authors = [
     {name = "Dániel Kántor", email = "git@daniel-kantor.com"},
 ]
-requires-python = ">=3.8,<3.15"
+requires-python = ">=3.10,<3.15"
 #readme = "README.md"
 license = {text = "AGPL-3.0"}
 dependencies = [
@@ -68,5 +68,11 @@ dependencies = [
     "jsonschema>=4.22.0",
     "awscli>=1.37.6",
 ]
+
+[tool.uv]
+override-dependencies = ["click>=8.3.3"]
+
+[tool.pdm.resolution.overrides]
+click = ">=8.3.3"
 
 

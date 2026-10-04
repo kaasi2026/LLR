@@ -42,9 +42,7 @@ const pythonCommandCandidates = [
 	'python3.13',
 	'python3.12',
 	'python3.11',
-	'python3.10',
-	'python3.9',
-	'python3.8'
+	'python3.10'
 ].filter(Boolean);
 
 function parsePythonVersion(output) {
@@ -54,10 +52,10 @@ function parsePythonVersion(output) {
 }
 
 function isSupportedPythonVersion(version) {
-	// The project supports Python 3.8 through 3.14.
+	// The project supports Python 3.10 through 3.14.
 	if (!version) return false;
 	if (version.major !== 3) return false;
-	return version.minor >= 8 && version.minor < 15;
+	return version.minor >= 10 && version.minor < 15;
 }
 
 function findPython() {

@@ -20,7 +20,7 @@ try:
 except ModuleNotFoundError as error:
     raise SystemExit(
         f"Missing Python dependency '{error.name}'. From the repository root, install the local project with "
-        "`python -m pip install -e ./src` in Python 3.8-3.14."
+        "`python -m pip install -e ./src` in Python 3.10-3.14."
     ) from error
 
 
